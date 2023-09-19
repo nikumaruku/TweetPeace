@@ -14,13 +14,13 @@ async function analyzeTweetContent(tweetUrl) {
     return null;
   }
 
-  // const browser = await puppeteer.launch({ headless: true });
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({ headless: false });
+  // const browser = await puppeteer.launch();
   const page = await browser.newPage();
   const sentiment = new Sentiment();
 
   try {
-    await page.goto(tweetUrl);
+    await page.goto(tweetUrl, { waitUntil: "networkidle2", timeout: 0 });
     await page.waitForSelector('div[data-testid="tweetText"]', {
       timeout: 20000,
     });
