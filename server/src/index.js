@@ -12,7 +12,8 @@ app.use(bodyParser.json());
 
 // Define an API endpoint for tweet analysis
 app.post("/api/analyze", async (req, res) => {
-  const tweetUrl = req.body.tweetUrl; // Assuming you pass the tweet URL in the request
+  const tweetUrl = req.body.tweetUrl; 
+  
   try {
     // Call the analyzeTweetContent function to perform sentiment analysis
     const analysisResult = await analyzeTweetContent(tweetUrl);
