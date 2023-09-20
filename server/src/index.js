@@ -2,36 +2,25 @@
 import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
-import analyzeTweetContent from "../module/sentimentAnalysis.js";
+import mongoose from "mongoose";
+
+import { SentimentRouter } from "../router/SentimentRouter.js";
+import { UserRouter } from "../router/UserRouter.js";
+// import { UserRouter } from "../router/UserRouter";
 
 const app = express();
+const port = 3001;
 
-// Enable CORS and JSON body parsing
 app.use(cors());
 app.use(bodyParser.json());
 
-// Define an API endpoint for tweet analysis
-app.post("/api/analyze", async (req, res) => {
-  const tweetUrl = req.body.tweetUrl; 
-  
-  try {
-    // Call the analyzeTweetContent function to perform sentiment analysis
-    const analysisResult = await analyzeTweetContent(tweetUrl);
-    if (analysisResult !== null) {
-      // Return the analysis result as JSON
-      res.json({ analysisResult });
-    } else {
-      // Handle the case when analysis fails
-      res.status(400).json({ error: "Analysis failed" });
-    }
-  } catch (error) {
-    console.error("Error analyzing tweet:", error);
-    res.status(500).json({ error: "Internal server error" });
-  }
-});
+//Endpoints
+app.use("/auth", UserRouter);
+app.use("/tweet", SentimentRouter);
 
-// Start the server on a specific port (e.g., 3001)
-const port = process.env.PORT || 3001;
+//Establish connection to MongoDB later
+// mongoose.connect()
+
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
