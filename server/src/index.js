@@ -6,7 +6,6 @@ import mongoose from "mongoose";
 
 import { SentimentRouter } from "../router/SentimentRouter.js";
 import { UserRouter } from "../router/UserRouter.js";
-// import { UserRouter } from "../router/UserRouter";
 
 const app = express();
 const port = 3001;
@@ -15,11 +14,20 @@ app.use(cors());
 app.use(bodyParser.json());
 
 //Endpoints
-app.use("/auth", UserRouter);
+app.use("/", UserRouter);
 app.use("/tweet", SentimentRouter);
 
-//Establish connection to MongoDB later
-// mongoose.connect()
+//Establish MongoDB connection
+mongoose
+  .connect(
+    "mongodb+srv://niksyahmiirfan:5ETk0SS0zcf4ZaKL@cyberbullying.qsrkdye.mongodb.net/?retryWrites=true&w=majority"
+  )
+  .then(() => {
+    console.log("Successfully connected to DB");
+  })
+  .catch((err) => {
+    console.log(err);
+  });
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
