@@ -26,7 +26,7 @@ const TweetAnalysisForm = () => {
   };
 
   return (
-    <div className="h-screen flex flex-col justify-center items-center ">
+    <div className="h-screen flex flex-col justify-center items-center">
       <div className="flex flex-col justify-center items-center bg-[#E4E4D0] space-y-5 p-10 rounded-lg">
         <h1 className="text-[#94A684] font-semibold hover:font-bold">
           Tweet Sentiment Analyzer
@@ -37,7 +37,7 @@ const TweetAnalysisForm = () => {
           placeholder="Paste tweet link here"
           className="bg-white text-black"
         />
-        <button onClick={handleAnalysis} disabled={isLoading}>
+        <button onClick={handleAnalysis} disabled={isLoading} >
           Analyze
         </button>
         {isLoading && <p>Analyzing...</p>}
@@ -45,9 +45,27 @@ const TweetAnalysisForm = () => {
           <div>
             <h2 className="text-3xl font-bold underline">Analysis Result:</h2>
             <p>Score: {analysisResult.score}</p>
-            <p>Comparative: {analysisResult.comparative}</p>
-            {/* Include other properties you want to display */}
+            {/* <p>Comparative: {analysisResult.comparative}</p> */}
             <p>Overall Sentiment: {analysisResult.overallSentiment}</p>
+            <p>Tweet Category: {analysisResult.tweetCategory}</p>
+            <p>
+              Negative Words Count:{" "}
+              {analysisResult.negativeWordCount}
+            </p>
+            {analysisResult.badWords &&  (
+              <div>
+                <h3 className="text-xl font-semibold mt-4">
+                  List of Bad Words Detected:
+                </h3>
+                <ul>
+                  {analysisResult.badWords.map((word) => (
+                    <li key={word.word}>
+                      {word.word} - {word.count} occurrence(s)
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
         )}
         {error && <p>{error}</p>}
