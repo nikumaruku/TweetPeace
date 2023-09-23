@@ -6,6 +6,7 @@ const TweetAnalysisForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [analysisResult, setAnalysisResult] = useState(null);
   const [error, setError] = useState(null);
+  const [analysisComplete, setAnalysisComplete] = useState(false);
 
   const handleAnalysis = async () => {
     try {
@@ -18,8 +19,27 @@ const TweetAnalysisForm = () => {
 
       const { analysisResult } = response.data;
       setAnalysisResult(analysisResult);
+      setAnalysisComplete(true); 
     } catch (error) {
       setError("Error analyzing tweet. Please try again");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleSaveTweet = async () => {
+    try {
+      setIsLoading(true);
+
+      await axios.post("http://localhost:3001/saveTweet", {
+        tweetContent: tweetContent,
+        analysisResult: analysisResult,
+      });
+
+      alert('Tweet saved!')
+    } catch (err) {
+      console.log(err);
+      setError("Error saving tweet. Please try again");
     } finally {
       setIsLoading(false);
     }
@@ -37,23 +57,20 @@ const TweetAnalysisForm = () => {
           placeholder="Paste tweet link here"
           className="bg-white text-black"
         />
-        <button onClick={handleAnalysis} disabled={isLoading} >
+        <button onClick={handleAnalysis} disabled={isLoading}>
           Analyze
         </button>
-        {isLoading && <p>Analyzing...</p>}
-        {analysisResult && (
+        {isLoading && !analysisComplete && <p>Analyzing...</p>}
+        {analysisComplete && (
           <div>
             <h2 className="text-3xl font-bold underline">Analysis Result:</h2>
             <p>Score: {analysisResult.score}</p>
             {/* <p>Comparative: {analysisResult.comparative}</p> */}
             <p>Overall Sentiment: {analysisResult.overallSentiment}</p>
             <p>Tweet Category: {analysisResult.tweetCategory}</p>
-            <p>
-              Negative Words Count:{" "}
-              {analysisResult.negativeWordCount}
-            </p>
-            {analysisResult.badWords &&  (
-              <div>
+            <p>Negative Words Count: {analysisResult.negativeWordCount}</p>
+            {analysisResult.badWords && (
+              <div className="my-5">
                 <h3 className="text-xl font-semibold mt-4">
                   List of Bad Words Detected:
                 </h3>
@@ -66,6 +83,8 @@ const TweetAnalysisForm = () => {
                 </ul>
               </div>
             )}
+            <button onClick={handleSaveTweet}>Save Result</button>{" "}
+            {/* Add Save Result button */}
           </div>
         )}
         {error && <p>{error}</p>}
