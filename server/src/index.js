@@ -6,6 +6,8 @@ import mongoose from "mongoose";
 
 import { SentimentRouter } from "../router/SentimentRouter.js";
 import { UserRouter } from "../router/UserRouter.js";
+import { SavedTweetRouter } from "../router/SavedTweetRouter.js";
+import { ReportRouter } from "../router/ReportRouter.js";
 
 const app = express();
 const port = 3001;
@@ -16,6 +18,8 @@ app.use(bodyParser.json());
 //Endpoints
 app.use("/", UserRouter);
 app.use("/tweet", SentimentRouter);
+app.use("/saveTweet", SavedTweetRouter);
+app.use("/createReport", ReportRouter)
 
 //Establish MongoDB connection
 mongoose

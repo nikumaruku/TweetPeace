@@ -12,6 +12,7 @@ router.post("/analyze", async (req, res) => {
     if (analysisResult !== null) {
       // Return the analysis result as JSON
       res.json({ analysisResult });
+      console.log({analysisResult});
     } else {
       // Handle the case when analysis fails
       res.status(400).json({ error: "Analysis failed" });
