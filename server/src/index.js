@@ -8,6 +8,7 @@ import { SentimentRouter } from "../router/SentimentRouter.js";
 import { UserRouter } from "../router/UserRouter.js";
 import { SavedTweetRouter } from "../router/SavedTweetRouter.js";
 import { ReportRouter } from "../router/ReportRouter.js";
+import { GuardianRouter } from "../router/GuardianRouter.js";
 
 const app = express();
 const port = 3001;
@@ -19,7 +20,8 @@ app.use(bodyParser.json());
 app.use("/", UserRouter);
 app.use("/tweet", SentimentRouter);
 app.use("/saveTweet", SavedTweetRouter);
-app.use("/createReport", ReportRouter)
+app.use("/createReport", ReportRouter);
+app.use("/addGuardian", GuardianRouter);
 
 //Establish MongoDB connection
 mongoose
