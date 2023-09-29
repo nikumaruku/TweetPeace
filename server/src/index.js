@@ -20,7 +20,7 @@ app.use(bodyParser.json());
 app.use("/", UserRouter);
 app.use("/tweet", SentimentRouter);
 app.use("/saveTweet", SavedTweetRouter);
-app.use("/createReport", ReportRouter);
+app.use("/report", ReportRouter);
 app.use("/addGuardian", GuardianRouter);
 
 //Establish MongoDB connection

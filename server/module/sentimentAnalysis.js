@@ -1,53 +1,15 @@
 import puppeteer from "puppeteer";
 import Sentiment from "sentiment";
 
+
 async function isValidTweetUrl(tweetUrl) {
   // Regular expression pattern to match a Twitter tweet URL
   const tweetUrlPattern = /^https:\/\/twitter\.com\/\w+\/status\/\d+$/;
   return tweetUrlPattern.test(tweetUrl);
 }
 
-// async function analyzeTweetContent(tweetUrl) {
-//   // Check if the provided URL is a valid Twitter tweet URL
-//   if (!isValidTweetUrl(tweetUrl)) {
-//     console.error("Invalid tweet URL:", tweetUrl);
-//     return null;
-//   }
-
-//   const browser = await puppeteer.launch({ headless: false });
-//   // const browser = await puppeteer.launch();
-//   const page = await browser.newPage();
-//   const sentiment = new Sentiment();
-
-//   try {
-//     await page.goto(tweetUrl, { waitUntil: "networkidle2", timeout: 0 });
-//     await page.waitForSelector('div[data-testid="tweetText"]', {
-//       timeout: 20000,
-//     });
-//     const tweetContent = await page.$eval(
-//       'div[data-testid="tweetText"]',
-//       (tweet) => tweet.textContent
-//     );
-
-//     // Analyze the tweet content for sentiment
-//     const analysis = sentiment.analyze(tweetContent);
-
-//     // Determine overall sentiment (positive or negative) based on a threshold
-//     const overallSentiment = analysis.score > 0 ? "Positive" : "Negative";
-
-//     return {
-//       ...analysis,
-//       overallSentiment,
-//     };
-//   } catch (error) {
-//     console.error("Error extracting or analyzing tweet content:", error);
-//     return null; // Handle the error as needed
-//   } finally {
-//     await browser.close();
-//   }
-// }
-
 async function analyzeTweetContent(tweetUrl) {
+
   // Check if the provided URL is a valid Twitter tweet URL
   if (!isValidTweetUrl(tweetUrl)) {
     console.error("Invalid tweet URL:", tweetUrl);
@@ -72,7 +34,7 @@ async function analyzeTweetContent(tweetUrl) {
     const overallSentiment = analysis.score > 0 ? "Positive" : "Negative"; //Check back the logic
 
     // Determine the tweet category
-    let tweetCategory = "Green"; 
+    let tweetCategory = "Green";
     if (analysis.score < 0) {
       tweetCategory = "Red";
     }
@@ -94,7 +56,7 @@ async function analyzeTweetContent(tweetUrl) {
         }
       }
     });
-  
+
     return {
       ...analysis,
       overallSentiment,

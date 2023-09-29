@@ -23,4 +23,24 @@ router.post("/", async (req, res) => {
   }
 });
 
+router.get("/", async (req, res) => {
+  try {
+    const reports = await ReportModel.find().sort({ createdAt: -1 }); // Fetch all reports and sort by createdAt in descending order
+    res.status(200).json(reports);
+  } catch (error) {
+    console.error("Error fetching reports:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+router.get("/numReports", async (req, res) => {
+  try {
+    const numReports = await ReportModel.countDocuments();
+    res.json({ numReports });
+  } catch (error) {
+    console.error("Error fetching number of reports:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 export { router as ReportRouter };

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
-import { PhotoIcon } from "@heroicons/react/24/solid";
+// import { PhotoIcon } from "@heroicons/react/solid";
 
 export default function ReportTweet() {
   const [tweetLink, setTweetLink] = useState("");
@@ -40,13 +40,13 @@ export default function ReportTweet() {
     <form>
       <div className="space-y-12">
         <div className="border-b border-gray-900/10 pb-12">
-          <h1 className=" leading-7 text-gray-900 text-4xl font-bold font-mono">
+          {/* <h1 className=" leading-7 text-gray-900 text-4xl font-bold font-mono">
             Report Tweet
-          </h1>
+          </h1> */}
 
           <label
             htmlFor="street-address"
-            className="block text-sm font-medium leading-6 text-gray-900 mt-10"
+            className="block text-sm font-medium leading-6 text-gray-900"
           >
             Tweet Link
           </label>
@@ -67,7 +67,7 @@ export default function ReportTweet() {
             >
               Incident Type
             </label>
-            <div className="mt-2 flex flex-col justify-center items-center">
+            <div className="mt-2">
               <select
                 id="harassment"
                 name="harassment"
@@ -109,10 +109,10 @@ export default function ReportTweet() {
               </label>
               <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
                 <div className="text-center">
-                  <PhotoIcon
+                  {/* <PhotoIcon
                     className="mx-auto h-12 w-12 text-gray-300"
                     aria-hidden="true"
-                  />
+                  /> */}
                   <div className="mt-4 flex text-sm leading-6 text-gray-600">
                     <label
                       htmlFor="file-upload"

@@ -25,14 +25,17 @@ const Login = () => {
   };
 
   return (
-    <AuthForm
-      username={username}
-      setUsername={setUsername}
-      password={password}
-      setPassword={setPassword}
-      label="Login"
-      onSubmit={handleLogin}
-    />
+    <>
+      <AuthForm
+        username={username}
+        setUsername={setUsername}
+        password={password}
+        setPassword={setPassword}
+        label="Login"
+        onSubmit={handleLogin}
+      />
+
+    </>
   );
 };
 
