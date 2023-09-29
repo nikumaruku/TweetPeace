@@ -2,7 +2,13 @@ import { Fragment } from "react";
 import { useState } from "react";
 
 import { Disclosure, Menu, Transition } from "@headlessui/react";
-import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import {
+  Bars3Icon,
+  BellIcon,
+  CogIcon,
+  XMarkIcon,
+  ArrowLeftOnRectangleIcon,
+} from "@heroicons/react/24/outline";
 
 import AnalyseTweet from "../../components/AnalyseTweet.jsx";
 import ReportTweet from "../ReportTweet.jsx";
@@ -37,9 +43,8 @@ const navigation = [
 ];
 
 const userNavigation = [
-  { name: "Your Profile", href: "/profile" },
-  { name: "Settings", href: "/settings" },
-  { name: "Sign out", href: "/login" },
+  { name: "Settings", icon: CogIcon, href: "/settings" },
+  { name: "Sign Out", icon: ArrowLeftOnRectangleIcon, href: "/login" },
 ];
 
 function classNames(...classes) {
@@ -63,7 +68,7 @@ export default function UserDashboard() {
         return <DashboardHome />;
     }
   };
-  
+
   return (
     <>
       <div className="min-h-full">
@@ -71,17 +76,17 @@ export default function UserDashboard() {
           {({ open }) => (
             <>
               <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <div className="flex h-16 items-center justify-between">
+                <div className="flex h-16 items-center justify-between ">
                   <div className="flex items-center">
-                    <div className="flex-shrink-0">
+                    {/* <div className="flex-shrink-0">
                       <img
                         className="h-8 w-8"
                         src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
                         alt="Your Company"
                       />
-                    </div>
+                    </div> */}
                     <div className="hidden md:block">
-                      <div className="ml-10 flex items-baseline space-x-4">
+                      <div className="flex items-baseline space-x-4">
                         {navigation.map((item) => (
                           <button
                             key={item.name}
@@ -101,15 +106,6 @@ export default function UserDashboard() {
                   </div>
                   <div className="hidden md:block">
                     <div className="ml-4 flex items-center md:ml-6">
-                      <button
-                        type="button"
-                        className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-                      >
-                        <span className="absolute -inset-1.5" />
-                        <span className="sr-only">View notifications</span>
-                        <BellIcon className="h-6 w-6" aria-hidden="true" />
-                      </button>
-
                       {/* Profile dropdown */}
                       <Menu as="div" className="relative ml-3">
                         <div>
@@ -143,6 +139,7 @@ export default function UserDashboard() {
                                       "block px-4 py-2 text-sm text-gray-700"
                                     )}
                                   >
+                                    <item.icon className="h-5 w-5 inline mr-2" />{" "}
                                     {item.name}
                                   </a>
                                 )}
