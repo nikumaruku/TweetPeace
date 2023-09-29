@@ -5,7 +5,7 @@ import Register from "./pages/Register";
 import ReportTweet from "./pages/ReportTweet";
 import Home from "./pages/Home.jsx";
 import UserDashboard from "./pages/dashboard/UserDashboard.jsx";
-import Settings from "./pages/Settings.jsx";
+import Settings from "./pages/dashboard/Settings";
 import Profile from "./pages/Profile.jsx";
 import AnalyseTweet from "./components/AnalyseTweet.jsx";
 
