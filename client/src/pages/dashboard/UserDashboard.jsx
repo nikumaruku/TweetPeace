@@ -11,7 +11,7 @@ import {
 } from "@heroicons/react/24/outline";
 
 import AnalyseTweet from "../../components/AnalyseTweet.jsx";
-import ReportTweet from "../ReportTweet.jsx";
+import ReportTweet from "../../components/ReportTweet.jsx";
 import UserStats from "./UserStats";
 import UserContent from "./UserContent";
 import TweetCollection from "../../components/TweetCollection.jsx";
