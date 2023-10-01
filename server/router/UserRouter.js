@@ -1,8 +1,14 @@
 import express from "express";
 import bcrypt from "bcrypt";
+import jwt from 'jsonwebtoken'
 import { UserModel } from "../models/UserModel.js";
 
 const router = express.Router();
+
+function createToken(username) {
+  const token = jwt.sign({ username }, 'bully123', { expiresIn: '1h' });
+  return token;
+}
 
 //Register route
 router.post("/register", async (req, res) => {
@@ -36,6 +42,8 @@ router.post("/register", async (req, res) => {
     await newUser.save();
 
     res.json({ message: "User has been successfully registered!" });
+    createToken(username);
+    
   } catch (err) {
     console.log(err);
     res.json({ message: "An error has occured. Please try again!" });
