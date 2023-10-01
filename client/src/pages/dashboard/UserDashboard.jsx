@@ -44,8 +44,20 @@ const navigation = [
 
 const userNavigation = [
   { name: "Settings", icon: CogIcon, href: "/settings" },
-  { name: "Sign Out", icon: ArrowLeftOnRectangleIcon, href: "/login" },
+  {
+    name: "Sign Out",
+    icon: ArrowLeftOnRectangleIcon,
+    onClick: () => handleSignOut(),
+  },
 ];
+
+const handleSignOut = () => {
+  // Remove the token from local storage
+  localStorage.removeItem("token");
+
+  // Redirect to the login page or any other appropriate action
+  window.location.href = "/login";
+};
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -132,16 +144,31 @@ export default function UserDashboard() {
                             {userNavigation.map((item) => (
                               <Menu.Item key={item.name}>
                                 {({ active }) => (
-                                  <a
-                                    href={item.href}
-                                    className={classNames(
-                                      active ? "bg-gray-100" : "",
-                                      "block px-4 py-2 text-sm text-gray-700"
+                                  <>
+                                    {item.href ? (
+                                      <a
+                                        href={item.href}
+                                        className={classNames(
+                                          active ? "bg-gray-100" : "",
+                                          "block px-4 py-2 text-sm text-gray-700"
+                                        )}
+                                      >
+                                        <item.icon className="h-5 w-5 inline mr-2" />{" "}
+                                        {item.name}
+                                      </a>
+                                    ) : (
+                                      <button
+                                        onClick={item.onClick}
+                                        className={classNames(
+                                          active ? "bg-gray-100" : "",
+                                          "block px-4 py-2 text-sm text-gray-700"
+                                        )}
+                                      >
+                                        <item.icon className="h-5 w-5 inline mr-2" />{" "}
+                                        {item.name}
+                                      </button>
                                     )}
-                                  >
-                                    <item.icon className="h-5 w-5 inline mr-2" />{" "}
-                                    {item.name}
-                                  </a>
+                                  </>
                                 )}
                               </Menu.Item>
                             ))}
