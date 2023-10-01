@@ -1,5 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
+import ProtectedRoute from "./ProtectedRoute";
+
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ReportTweet from "./pages/ReportTweet";
@@ -19,7 +21,14 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/tweet" element={<AnalyseTweet />} />
           <Route path="/report" element={<ReportTweet />} />
-          <Route path="/dashboard" element={<UserDashboard />} />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <UserDashboard />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/settings" element={<Settings />} />
           <Route path="/profile" element={<Profile />} />
         </Routes>
