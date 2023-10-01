@@ -1,6 +1,5 @@
 import axios from "axios";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import AuthForm from "../components/AuthForm.jsx";
 import Confirmation from "../components/modals/confirmation.jsx";
 
@@ -11,25 +10,22 @@ const Register = () => {
   const [age, setAge] = useState("");
   const [showConfirmation, setShowConfirmation] = useState(false);
 
-  const navigate = useNavigate();
-
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      const load = await axios.post("http://localhost:3001/register", {
+      const user = await axios.post("http://localhost:3001/register", {
         username,
         password,
         email,
         age,
       });
-      console.log(load);
-      // alert("Registration successful! Please proceed to login");
+      console.log({user});
+
+      
       setShowConfirmation(true);
-      navigate("/login");
     } catch (err) {
-      console.error(err);
-      setShowConfirmation(true);
-      // alert("Something went wrong! Please try again");
+      console.log(err);
+      alert("Error occurs! Please try registering again");
     }
   };
 
