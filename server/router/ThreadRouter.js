@@ -1,10 +1,12 @@
 import express from "express";
+import Sentiment from "sentiment";
 import fetchThreadContent from "../module/fetchTwitterThread.js";
 import { TwitterThreadModel } from "../models/TwitterThreadModel.js";
 
 const router = express.Router();
+const sentiment = new Sentiment();
 
-router.post("/obtainThread", async (req, res) => {
+router.post("/analyse", async (req, res) => {
   try {
     const { username, threadUrls } = req.body;
 
@@ -18,6 +20,11 @@ router.post("/obtainThread", async (req, res) => {
 
     const tweetContents = await fetchThreadContent(threadUrls);
 
+    const tweetSentiments = tweetContents.map((tweet) => {
+      const analysis = sentiment.analyze(tweet);
+      return analysis;
+    });
+
     const twitterThread = new TwitterThreadModel({
       username: username,
       threadId: threadIds,
@@ -26,7 +33,7 @@ router.post("/obtainThread", async (req, res) => {
 
     await twitterThread.save();
 
-    res.status(200).json({ twitterThread });
+    res.status(200).json({ tweetSentiments });
   } catch (error) {
     console.error(error);
     res
