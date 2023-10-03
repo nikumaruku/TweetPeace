@@ -9,6 +9,7 @@ import { UserRouter } from "../router/UserRouter.js";
 import { SavedTweetRouter } from "../router/SavedTweetRouter.js";
 import { ReportRouter } from "../router/ReportRouter.js";
 import { GuardianRouter } from "../router/GuardianRouter.js";
+import { ThreadRouter } from "../router/ThreadRouter.js";
 
 const app = express();
 const port = 3001;
@@ -22,6 +23,7 @@ app.use("/tweet", SentimentRouter);
 app.use("/saveTweet", SavedTweetRouter);
 app.use("/report", ReportRouter);
 app.use("/addGuardian", GuardianRouter);
+app.use("/thread", ThreadRouter )
 
 //Establish MongoDB connection
 mongoose
