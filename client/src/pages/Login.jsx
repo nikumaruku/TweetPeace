@@ -1,8 +1,10 @@
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+
 import AuthForm from "../components/AuthForm.jsx";
 import Confirmation from "../components/modals/confirmation.jsx";
+
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -11,6 +13,7 @@ const Login = () => {
 
   const navigate = useNavigate();
 
+
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
@@ -18,11 +21,13 @@ const Login = () => {
         username,
         password,
       });
-      
-      const token = res.data.token;
-      localStorage.setItem('token', token);
 
-      navigate("/dashboard");
+      setUsername(res.data.username)
+      const token = res.data.token;
+      localStorage.setItem("token", token); //JWT stuff
+      
+      navigate(`/dashboard?username=${username}`);
+   
     } catch (err) {
       console.log(err);
       alert("Username or password is incorrect! Please try again");
