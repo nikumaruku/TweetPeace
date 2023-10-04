@@ -31,6 +31,9 @@ async function analyzeTweetContent(tweetUrl) {
     // Analyze the tweet content for sentiment
     const analysis = sentiment.analyze(tweetContent);
 
+
+    //--------------------------------------------------------------------
+    
     const overallSentiment = analysis.score > 0 ? "Positive" : "Negative"; //Check back the logic
 
     // Determine the tweet category

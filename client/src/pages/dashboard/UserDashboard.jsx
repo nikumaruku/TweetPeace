@@ -1,11 +1,13 @@
 import { Fragment } from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import {
   Bars3Icon,
   BellIcon,
-  CogIcon,
+  // CogIcon,
+  UserCircleIcon,
   XMarkIcon,
   ArrowLeftOnRectangleIcon,
 } from "@heroicons/react/24/outline";
@@ -43,7 +45,7 @@ const navigation = [
 ];
 
 const userNavigation = [
-  { name: "Settings", icon: CogIcon, href: "/settings" },
+  // { name: "Settings", icon: CogIcon, href: "/settings" },
   {
     name: "Sign Out",
     icon: ArrowLeftOnRectangleIcon,
@@ -64,7 +66,34 @@ function classNames(...classes) {
 }
 
 export default function UserDashboard() {
+  const search = useLocation().search;
+  const username = new URLSearchParams(search).get("username");
+
   const [currentSection, setCurrentSection] = useState("Home");
+  const [currentDateTime, setCurrentDateTime] = useState(new Date());
+  
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setCurrentDateTime(new Date());
+    }, 1000);
+
+    // Clear the interval when the component unmounts
+    return () => clearInterval(intervalId);
+  }, []);
+
+  const formatDateTime = (dateTime) => {
+    return dateTime.toLocaleString(undefined, {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
+
+
 
   const renderComponent = () => {
     switch (currentSection) {
@@ -83,7 +112,7 @@ export default function UserDashboard() {
 
   return (
     <>
-      <div className="min-h-full">
+      <div className="min-h-full" >
         <Disclosure as="nav" className="bg-gray-800">
           {({ open }) => (
             <>
@@ -121,14 +150,15 @@ export default function UserDashboard() {
                       {/* Profile dropdown */}
                       <Menu as="div" className="relative ml-3">
                         <div>
-                          <Menu.Button className="relative flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+                          <Menu.Button className="relative flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 focus:ring-offset-gray-800">
                             <span className="absolute -inset-1.5" />
                             <span className="sr-only">Open user menu</span>
-                            <img
+                            {/* <img
                               className="h-8 w-8 rounded-full"
                               src={user.imageUrl}
                               alt=""
-                            />
+                            /> */}
+                            <UserCircleIcon className="h-8 w-8 rounded-full bg-white" />
                           </Menu.Button>
                         </div>
                         <Transition
@@ -262,10 +292,12 @@ export default function UserDashboard() {
         </Disclosure>
 
         <header className="bg-white shadow">
-          <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-            <h1 className="text-3xl font-bold tracking-tight text-gray-900">
-              Welcome back, Niku!
-            </h1>
+          <div className="flex justify-between mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+            <h3 className="text-2xl font-bold tracking-tight text-gray-900">
+              Welcome back, {username}!
+            </h3>
+
+            <h4>{formatDateTime(currentDateTime)}</h4>
           </div>
         </header>
         <main>
