@@ -3,9 +3,11 @@ import axios from "axios";
 
 export default function AnalyseTweet() {
   const [tweetContent, setTweetContent] = useState("");
+  const [threadContent, setThreadContent] = useState("");
   const [username, setUsername] = useState("");
   const [tweetUrls, setTweetUrls] = useState(["", ""]);
   const [tweetResult, setTweetResult] = useState(false);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
   const [analysisResult, setAnalysisResult] = useState(null);
@@ -13,6 +15,7 @@ export default function AnalyseTweet() {
   const [analysisComplete, setAnalysisComplete] = useState(false);
   const [chooseTweet, setChooseTweet] = useState(false);
   const [chooseThread, setChooseThread] = useState(false);
+  const [hasConfirmedData, setHasConfirmedData] = useState(false);
 
   const handleTweetAnalysis = async () => {
     try {
@@ -34,6 +37,28 @@ export default function AnalyseTweet() {
     }
   };
 
+  const handleGetThread = async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+
+      const response = await axios.post("http://localhost:3001/thread/obtain", {
+        username,
+        threadUrls: tweetUrls,
+      });
+
+      const threadContent = response.data;
+      console.log(threadContent);
+      setThreadContent(threadContent);
+      setIsPopupOpen(true);
+      setAnalysisComplete(true);
+    } catch (error) {
+      setError("Error obtaining threads. Please try again");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleThreadAnalysis = async () => {
     try {
       setIsLoading(true);
@@ -43,7 +68,6 @@ export default function AnalyseTweet() {
         "http://localhost:3001/thread/analyse",
         {
           username,
-          threadUrls: tweetUrls,
         }
       );
 
@@ -104,6 +128,15 @@ export default function AnalyseTweet() {
     const updatedUrls = [...tweetUrls];
     updatedUrls[index] = value;
     setTweetUrls(updatedUrls);
+  };
+
+  const handleClosePopup = () => {
+    setIsPopupOpen(false);
+  };
+
+  const handleConfirmData = () => {
+    setHasConfirmedData(true);
+    setIsPopupOpen(false);
   };
 
   return (
@@ -225,13 +258,54 @@ export default function AnalyseTweet() {
           </button>
 
           <button
-            onClick={handleThreadAnalysis}
-            disabled={isLoading}
-            type="submit"
-            className="mt-5 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            type="button"
+            onClick={handleGetThread}
+            className="mt-5 bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-2 px-4 rounded"
           >
-            Analyse
+            Request Thread
           </button>
+
+          {hasConfirmedData && (
+            <button
+              onClick={handleThreadAnalysis}
+              disabled={isLoading}
+              type="submit"
+              className="mt-5 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            >
+              Analyse
+            </button>
+          )}
+
+          {/* Popup */}
+          {isPopupOpen && (
+            <div className="fixed inset-0 flex items-center justify-center z-10">
+          <div className="bg-white p-4 rounded shadow-lg">
+            {threadContent && (
+              <>
+                <p>Is this the correct thread?</p>
+                {/* Display each tweet in the threadContent */}
+                {threadContent.tweetContents.map((tweet, index) => (
+                  <div key={index} className="mb-4">
+                    <p className="text-gray-900 text-sm">{tweet}</p>
+                  </div>
+                ))}
+                <button
+                  onClick={handleConfirmData}
+                  className="bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-2 px-4 rounded"
+                >
+                  Yes
+                </button>
+                <button
+                  onClick={handleClosePopup}
+                  className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded"
+                >
+                  No, close
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+          )}
         </div>
       )}
       {/* ------------------------------------- */}
