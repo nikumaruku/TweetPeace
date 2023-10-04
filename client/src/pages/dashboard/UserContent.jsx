@@ -1,36 +1,43 @@
 import {
-  BanknotesIcon,
-  CheckBadgeIcon,
-  ClockIcon,
+  LightBulbIcon,
+  AcademicCapIcon,
+  PhoneIcon,
   UsersIcon,
 } from "@heroicons/react/24/outline";
 
 const actions = [
   {
-    title: "Request time off",
-    href: "#",
-    icon: ClockIcon,
-    iconForeground: "text-teal-700",
-    iconBackground: "bg-teal-50",
+    title: "Cyberbullying Hotline",
+    href: "https://findahelpline.com/my/topics/bullying",
+    icon: PhoneIcon,
+    description:
+      "Need to talk? Get free, confidential support with Bullying from a real human. Online chat, text and phone helplines. No sign up or personal info required.",
+    iconForeground: "text-red-700",
+    iconBackground: "bg-red-50",
   },
   {
-    title: "Benefits",
-    href: "#",
-    icon: CheckBadgeIcon,
+    title: "What is Cyberbully?",
+    href: "https://www.stopbullying.gov/cyberbullying/what-is-it",
+    icon: AcademicCapIcon,
+    description:
+      "Discover tactics, prevention methods and how to deal with cyberbullying",
     iconForeground: "text-purple-700",
     iconBackground: "bg-purple-50",
   },
   {
-    title: "Schedule a one-on-one",
-    href: "#",
+    title: "Guardian Contact Info",
+    href: "/guardian",
     icon: UsersIcon,
+    description:
+      "Sometimes you need the support of your beloved ones when things get tough. Save information about a guardian or contact person for easy reachability, whenever you need them",
     iconForeground: "text-sky-700",
     iconBackground: "bg-sky-50",
   },
   {
-    title: "Payroll",
-    href: "#",
-    icon: BanknotesIcon,
+    title: "Words of the Day!",
+    href: "https://quotes-react.netlify.app/",
+    icon: LightBulbIcon,
+    description: "Click here to get some light motivation for the day! Stay strong and seek extra help if necessary, remember, no one deserves to suffer",
     iconForeground: "text-yellow-700",
     iconBackground: "bg-yellow-50",
   },
@@ -77,10 +84,7 @@ export default function UserContent() {
                 {action.title}
               </a>
             </h3>
-            <p className="mt-2 text-sm text-gray-500">
-              Doloribus dolores nostrum quia qui natus officia quod et dolorem.
-              Sit repellendus qui ut at blanditiis et quo et molestiae.
-            </p>
+            <p className="mt-2 text-sm text-gray-500">{action.description}</p>
           </div>
           <span
             className="pointer-events-none absolute right-6 top-6 text-gray-300 group-hover:text-gray-400"
