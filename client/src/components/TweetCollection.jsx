@@ -1,7 +1,7 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-
-import axios from "axios";
+import FeedbackForm from "./FeedbackForm";
 
 export default function TweetCollection() {
   const [savedTweets, setSavedTweets] = useState([]);
@@ -27,8 +27,10 @@ export default function TweetCollection() {
 function TweetCard({ savedTweet }) {
   const [expanded, setExpanded] = useState(false);
 
+  const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
+  const [selectedTweetId, setSelectedTweetId] = useState(null);
+
   function extractUser(tweetContent) {
-    // Regular expression to match Twitter URLs
     const twitterUrlRegex = /https:\/\/twitter.com\/([^/]+)\//;
     const match = tweetContent.match(twitterUrlRegex);
     return match ? match[1] : "Unknown";
@@ -91,6 +93,24 @@ function TweetCard({ savedTweet }) {
               <strong>Saved At:</strong>{" "}
               {new Date(savedTweet.savedAt).toLocaleDateString()}
             </p>
+            <button
+              onClick={() => {
+                setIsFeedbackOpen(true);
+                setSelectedTweetId(savedTweet._id);
+              }}
+              disabled={savedTweet.reviewed}
+              className="mt-3 rounded-md bg-indigo-50 px-3.5 py-2.5 text-sm font-semibold text-indigo-600 shadow-sm hover:bg-indigo-100"
+            >
+              Rate this analysis
+            </button>
+
+            {/* Feedback pop-up */}
+            {isFeedbackOpen && (
+              <FeedbackForm
+                setIsFeedbackOpen={setIsFeedbackOpen}
+                tweetId={selectedTweetId}
+              />
+            )}
           </div>
         )}
       </div>
