@@ -1,8 +1,10 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const AddGuardian = () => {
+  const navigate = useNavigate();
+
   const [guardianData, setGuardianData] = useState({
     name: "",
     email: "",
@@ -21,7 +23,9 @@ const AddGuardian = () => {
     e.preventDefault();
 
     try {
-      await axios.post("http://localhost:3001/guardians", guardianData);
+      await axios.post("http://localhost:3001/guardians/create", guardianData);
+      alert("Guardians contact info has been saved!");
+      navigate("/dashboard");
     } catch (error) {
       console.error("Error adding guardian:", error);
     }

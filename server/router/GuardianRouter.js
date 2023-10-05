@@ -3,7 +3,7 @@ import { GuardianModel } from "../models/GuardianModel.js";
 
 const router = express.Router();
 
-router.post("/", async (req, res) => {
+router.post("/create", async (req, res) => {
   try {
     const { name, email, phone } = req.body;
 

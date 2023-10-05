@@ -8,9 +8,6 @@ export default function AnalyseTweet() {
   const [tweetUrls, setTweetUrls] = useState(["", ""]);
   const [tweetResult, setTweetResult] = useState(false);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
-  const [rating, setRating] = useState(0);
-  const [feedbackText, setFeedbackText] = useState("");
 
   const [isLoading, setIsLoading] = useState(false);
   const [analysisResult, setAnalysisResult] = useState(null);
@@ -142,10 +139,6 @@ export default function AnalyseTweet() {
     setIsPopupOpen(false);
   };
 
-  const handleFeedbackSubmit = () => {
-    setIsFeedbackOpen(false);
-  };
-
   return (
     <form>
       <div className="bg-white px-6 py-9 sm:py-18 lg:px-8 ">
@@ -198,85 +191,6 @@ export default function AnalyseTweet() {
                   >
                     Analyse
                   </button>
-
-                  <button type="button" onClick={() => setIsFeedbackOpen(true)}>
-                    Feedback
-                  </button>
-
-                  {/* Feedback pop-up */}
-                  {isFeedbackOpen && (
-                    <div className="fixed inset-0 flex items-center justify-center z-50">
-                      <div className="bg-white rounded-lg p-6 w-96">
-                        <div className="flex justify-end">
-                          <button
-                            onClick={() => setIsFeedbackOpen(false)}
-                            className="text-gray-500 hover:text-gray-700 focus:outline-none"
-                          >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="h-6 w-6"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="M6 18L18 6M6 6l12 12"
-                              />
-                            </svg>
-                          </button>
-                        </div>
-                        <h2 className="text-lg font-semibold mb-4">Feedback</h2>
-                        <div className="mb-4">
-                          <label
-                            htmlFor="rating"
-                            className="block text-sm font-medium text-gray-700"
-                          >
-                            Rating (1-5):
-                          </label>
-                          <input
-                            type="number"
-                            id="rating"
-                            name="rating"
-                            value={rating}
-                            onChange={(e) => {
-                              const value = Number(e.target.value);
-                              if (value >= 1 && value <= 5) {
-                                setRating(value);
-                              }
-                            }}
-                            min="1"
-                            max="5"
-                            className="w-full mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:outline-none focus:border-indigo-400"
-                          />
-                        </div>
-                        <div className="mb-4">
-                          <label
-                            htmlFor="feedback"
-                            className="block text-sm font-medium text-gray-700"
-                          >
-                            Feedback:
-                          </label>
-                          <textarea
-                            id="feedback"
-                            name="feedback"
-                            value={feedbackText}
-                            onChange={(e) => setFeedbackText(e.target.value)}
-                            rows={4}
-                            className="w-full mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:outline-none focus:border-indigo-400"
-                          ></textarea>
-                        </div>
-                        <button
-                          onClick={handleFeedbackSubmit}
-                          className="w-full bg-indigo-600 text-white font-semibold py-2 rounded-md hover:bg-indigo-700"
-                        >
-                          Submit
-                        </button>
-                      </div>
-                    </div>
-                  )}
                 </div>
               </div>
             </div>

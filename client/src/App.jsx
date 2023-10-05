@@ -13,17 +13,6 @@ import AnalyseTweet from "./components/AnalyseTweet.jsx";
 import AddGuardian from "./components/AddGuardian";
 
 function App() {
-  // const [darkMode, setDarkMode] = useState(false);
-  
-  // const dashboardStyle = {
-  //   backgroundColor: darkMode ? "#333" : "#fff",
-  //   color: darkMode ? "#fff" : "#333",
-  //   transition: "background-color 0.3s, color 0.3s",
-  // };
-
-  // const toggleDarkMode = () => {
-  //   setDarkMode(!darkMode);
-  // };
   return (
     <>
       <BrowserRouter>
