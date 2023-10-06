@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import FeedbackForm from "./FeedbackForm";
+import ContactGuardian from "./ContactGuardian";
 
 export default function TweetCollection() {
   const [savedTweets, setSavedTweets] = useState([]);
@@ -28,6 +29,7 @@ function TweetCard({ savedTweet }) {
   const [expanded, setExpanded] = useState(false);
 
   const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
+  const [isContactOpen, setIsContactOpen] = useState(false);
   const [selectedTweetId, setSelectedTweetId] = useState(null);
 
   function extractUser(tweetContent) {
@@ -93,22 +95,39 @@ function TweetCard({ savedTweet }) {
               <strong>Saved At:</strong>{" "}
               {new Date(savedTweet.savedAt).toLocaleDateString()}
             </p>
-            <button
-              onClick={() => {
-                setIsFeedbackOpen(true);
-                setSelectedTweetId(savedTweet._id);
-              }}
-              disabled={savedTweet.reviewed}
-              className="mt-3 rounded-md bg-indigo-50 px-3.5 py-2.5 text-sm font-semibold text-indigo-600 shadow-sm hover:bg-indigo-100"
-            >
-              Rate this analysis
-            </button>
+
+            <div className="space-x-3">
+              <button
+                onClick={() => {
+                  setIsFeedbackOpen(true);
+                  setSelectedTweetId(savedTweet._id);
+                }}
+                disabled={savedTweet.reviewed}
+                className="mt-3 rounded-md bg-indigo-50 px-3.5 py-2.5 text-sm font-semibold text-indigo-600 shadow-sm hover:bg-indigo-100"
+              >
+                Rate this analysis
+              </button>
+              <button
+                onClick={() => setIsContactOpen(true)}
+                className="mt-3 rounded-md bg-indigo-50 px-3.5 py-2.5 text-sm font-semibold text-indigo-600 shadow-sm hover:bg-indigo-100"
+              >
+                Inform guardian
+              </button>
+            </div>
 
             {/* Feedback pop-up */}
             {isFeedbackOpen && (
               <FeedbackForm
                 setIsFeedbackOpen={setIsFeedbackOpen}
                 tweetId={selectedTweetId}
+              />
+            )}
+
+            {/* Contact pop-up */}
+            {isContactOpen && (
+              <ContactGuardian
+                setIsContactOpen={setIsContactOpen}
+                savedTweet={savedTweet}
               />
             )}
           </div>

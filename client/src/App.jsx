@@ -4,7 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import ReportTweet from './components/ReportTweet.jsx'
+import ReportTweet from "./components/ReportTweet.jsx";
 import Home from "./pages/Home.jsx";
 import UserDashboard from "./pages/dashboard/UserDashboard.jsx";
 import Settings from "./pages/dashboard/Settings";
@@ -28,7 +28,7 @@ function App() {
               // <ProtectedRoute>
               //   <UserDashboard />
               // </ProtectedRoute>
-              <UserDashboard/>
+              <UserDashboard />
             }
           />
           <Route path="/settings" element={<Settings />} />
