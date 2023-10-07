@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const UserSchema = mongoose.Schema({
-  username : {
+  username: {
     type: String,
     required: true,
   },
@@ -24,10 +24,28 @@ const UserSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  // savedTweets: [{
-  //   type: mongoose.Schema.Types.ObjectId,
-  //   ref: "savedTweet",
-  // }],
+  savedTweets: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "savedTweet",
+    },
+  ],
+  analysedTweets: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "analysedTweet",
+    },
+  ],
+  reports: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "report",
+    },
+  ],
+  guardian: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "report",
+  },
 });
 
 export const UserModel = mongoose.model("users", UserSchema);
