@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import AuthForm from "../components/AuthForm.jsx";
-import Confirmation from "../components/modals/confirmation.jsx";
+import SuccessRegister from "../components/modals/SuccessRegister.jsx";
 
 const Register = () => {
   const [username, setUsername] = useState("");
@@ -44,7 +44,7 @@ const Register = () => {
         onSubmit={handleRegister}
       />
       {showConfirmation && (
-        <Confirmation onClose={() => setShowConfirmation(false)} />
+        <SuccessRegister onClose={() => setShowConfirmation(false)} />
       )}
     </>
   );

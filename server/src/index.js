@@ -11,6 +11,7 @@ import { ReportRouter } from "../router/ReportRouter.js";
 import { GuardianRouter } from "../router/GuardianRouter.js";
 import { ThreadRouter } from "../router/ThreadRouter.js";
 import { FeedbackRouter } from "../router/FeedbackRouter.js";
+import { EmailRouter } from "../router/EmailRouter.js";
 
 // dotenv.config();
 const app = express();
@@ -27,6 +28,7 @@ app.use("/report", ReportRouter);
 app.use("/guardians", GuardianRouter);
 app.use("/thread", ThreadRouter);
 app.use("/feedback", FeedbackRouter);
+app.use("/email", EmailRouter)
 
 //Establish MongoDB connection
 mongoose

@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-// import ProtectedRoute from "./ProtectedRoute";
+import ProtectedRoute from "./ProtectedRoute";
 
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -11,6 +11,7 @@ import Settings from "./pages/dashboard/Settings";
 import Profile from "./pages/Profile.jsx";
 import AnalyseTweet from "./components/AnalyseTweet.jsx";
 import AddGuardian from "./components/AddGuardian";
+import DisplayGuardian from "./components/DisplayGuardian";
 
 function App() {
   return (
@@ -25,15 +26,15 @@ function App() {
           <Route
             path="/dashboard"
             element={
-              // <ProtectedRoute>
-              //   <UserDashboard />
-              // </ProtectedRoute>
-              <UserDashboard />
+              <ProtectedRoute>
+                <UserDashboard />
+              </ProtectedRoute>
             }
           />
           <Route path="/settings" element={<Settings />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/guardian" element={<AddGuardian />} />
+          <Route path="/testing" element={<DisplayGuardian />} />
         </Routes>
       </BrowserRouter>
     </>
