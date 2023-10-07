@@ -1,15 +1,19 @@
 
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import axios from "axios";
 
 export default function ReportHistory() {
   const [reports, setReports] = useState([]);
 
+  const search = useLocation().search;
+  const user = new URLSearchParams(search).get("username");
+
   useEffect(() => {
-    axios.get("http://localhost:3001/report").then((response) => {
+    axios.get(`http://localhost:3001/report/${user}`).then((response) => {
       setReports(response.data);
     });
-  }, []);
+  }, [user]);
 
   return (
     <div className="px-4 sm:px-6 lg:px-8">

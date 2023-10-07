@@ -1,15 +1,40 @@
-import axios from "axios";
+// import axios from "axios";
 import { useState } from "react";
-// import { PhotoIcon } from "@heroicons/react/solid";
+import { useLocation } from "react-router-dom";
+import axios from "axios";
+import ErrorReport from "./modals/ErrorReport";
+import SuccessReport from "./modals/SuccessReport";
 
 export default function ReportTweet() {
   const [tweetLink, setTweetLink] = useState("");
   const [incidentType, setIncidentType] = useState("Doxx");
   const [description, setDescription] = useState("");
   const [screenshot, setScreenshot] = useState("");
+  const [reportError, setReportError] = useState(null);
+  const [showConfirmation, setShowConfirmation] = useState(false);
+
+  const search = useLocation().search;
+  const user = new URLSearchParams(search).get("username");
+
+  const isValidTwitterUrl = (url) => {
+    // Regular expression to validate Twitter URL
+    const twitterUrlPattern =
+      /^(https?:\/\/)?twitter\.com\/[a-zA-Z0-9_]+\/status\/[0-9]+\/?$/;
+    return twitterUrlPattern.test(url);
+  };
 
   const handleReportCreation = async (e) => {
     e.preventDefault();
+
+    if (!tweetLink.trim() || !isValidTwitterUrl(tweetLink)) {
+      setReportError("Please provide a valid Twitter tweet link.");
+      return;
+    }
+
+    if (!incidentType.trim() || !description.trim() || !screenshot.trim()) {
+      setReportError("Please fill out all required fields.");
+      return;
+    }
 
     const reportData = {
       tweetLink,
@@ -20,17 +45,18 @@ export default function ReportTweet() {
 
     console.log({ reportData });
     try {
-      const response = await axios.post(
-        "http://localhost:3001/report",
-        reportData
+      await axios.post(
+        `http://localhost:3001/report/${user}`,
+        reportData,
+        user
       );
 
-      console.log("Report created:", response.data);
-
+      setReportError(null);
       setTweetLink(tweetLink);
       setIncidentType(incidentType);
       setDescription(description);
       setScreenshot(screenshot);
+      setShowConfirmation(true);
     } catch (error) {
       console.error("Error creating report:", error);
     }
@@ -59,135 +85,102 @@ export default function ReportTweet() {
   };
 
   return (
-    <form onSubmit={handleReportCreation}>
-      <div className="space-y-12">
-        <div className="border-b border-gray-900/10 pb-12">
-          {/* <h1 className=" leading-7 text-gray-900 text-4xl font-bold font-mono">
-            Report Tweet
-          </h1> */}
+    <form className="space-y-6 flex flex-col items-center justify-center">
+      <div className="border w-[70%] rounded-lg p-6">
+        <label className="block text-gray-900 text-sm font-medium">
+          Tweet Link
+        </label>
+        <input
+          type="text"
+          onChange={(e) => setTweetLink(e.target.value)}
+          className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+        />
 
-          <label
-            htmlFor="tweet-link"
-            className="block text-sm font-medium leading-6 text-gray-900"
-          >
-            Tweet Link
+        <div className="mt-4">
+          <label className="block text-gray-900 text-sm font-medium">
+            Incident Type
           </label>
-          <div className="mt-2">
-            <input
-              type="text"
-              onChange={(e) => setTweetLink(e.target.value)}
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-            />
-          </div>
+          <select
+            id="incidentType"
+            name="incidentType"
+            autoComplete="country-name"
+            className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            value={incidentType}
+            onChange={(e) => setIncidentType(e.target.value)}
+          >
+            <option value="Doxx">Doxx</option>
+            <option value="Threathen">Threathen</option>
+            <option value="Mencarut">Mencarut</option>
+          </select>
+        </div>
 
-          <div className="col-span-full mt-10">
-            <label
-              htmlFor="incident-type"
-              className="block text-sm font-medium leading-6 text-gray-900"
-            >
-              Incident Type
-            </label>
-            <div className="mt-2">
-              <select
-                id="incidentType"
-                name="incidentType"
-                autoComplete="country-name"
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
-                value={incidentType} // Set the selected value to the state
-                onChange={(e) => setIncidentType(e.target.value)} // Update the state when the user selects an option
-              >
-                <option value="Doxx">Doxx</option>
-                <option value="Threathen">Threathen</option>
-                <option value="Mencarut">Mencarut</option>
-              </select>
-            </div>
-          </div>
+        <div className="mt-4">
+          <label className="block text-gray-900 text-sm font-medium">
+            Provide description of incident
+          </label>
+          <textarea
+            id="about"
+            name="about"
+            rows={3}
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            placeholder=""
+          />
+        </div>
 
-          <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-            <div className="col-span-full">
-              <label
-                htmlFor="about"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Provide description of incident
-              </label>
-              <div className="mt-2">
-                <textarea
-                  id="about"
-                  name="about"
-                  rows={3}
-                  value={description} // Set the value to the state
-                  onChange={(e) => setDescription(e.target.value)} // Update the state when the user types
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  defaultValue={""}
-                />
+        <div className="mt-4">
+          <label className="block text-gray-900 text-sm font-medium">
+            Screenshot (Evidence)
+          </label>
+          <div className="mt-1 flex items-center justify-center px-6 py-4 border border-gray-300 border-dashed rounded-md">
+            {screenshot ? (
+              <div className="mt-4 flex flex-col items-center justify-center space-x-2">
+                <img src={screenshot} alt="Uploaded Image" width="200" />
+                <button
+                  type="button"
+                  className="text-red-600 hover:text-red-700 text-sm font-medium focus:outline-none"
+                  onClick={handleRemoveImage}
+                >
+                  Remove Image
+                </button>
               </div>
-            </div>
-
-            <div className="col-span-full">
-              <label
-                htmlFor="screenshot"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Screenshot (Evidence)
-              </label>
-              <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
-                <div className="text-center">
-                  <div className="mt-4 flex text-sm leading-6 text-gray-600">
-                    <label
-                      htmlFor="file-upload"
-                      className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
-                    >
-                      <span>Upload a file</span>
-                      <input
-                        id="file-upload"
-                        name="file-upload"
-                        type="file"
-                        className="sr-only"
-                        accept=".png, .jpg, .jpeg, .gif"
-                        onChange={handleFileInputChange}
-                      />
-                    </label>
-                    <p className="pl-1">or drag and drop</p>
-                  </div>
-                  <p className="text-xs leading-5 text-gray-600">
-                    PNG, JPG, GIF up to 10MB
-                  </p>
-
-                  {screenshot && (
-                    <div>
-                      <img src={screenshot} alt="Uploaded Image" width="200" />
-                      <button
-                        type="button"
-                        className="mt-2 text-sm font-medium text-red-600 hover:text-red-700 focus:outline-none"
-                        onClick={handleRemoveImage}
-                      >
-                        Remove Image
-                      </button>
-                    </div>
-                  )}
-
-                </div>
+            ) : (
+              <div className="">
+                <label
+                  htmlFor="file-upload"
+                  className="cursor-pointer inline-flex items-center px-1 py-2 border border-transparent text-sm font-medium rounded-md text-indigo-600 bg-white hover:bg-indigo-50 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
+                >
+                  Upload your proof here
+                  <input
+                    id="file-upload"
+                    name="file-upload"
+                    type="file"
+                    className="sr-only"
+                    accept=".png, .jpg, .jpeg, .gif"
+                    onChange={handleFileInputChange}
+                  />
+                </label>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>
-
-      <div className="mt-6 flex items-center justify-end gap-x-6">
+      <div className="mt-5 flex items-center justify-center">
+        {reportError && <ErrorReport reportError={reportError} />}
+      </div>
+      <div className="mt-6 flex justify-end">
         <button
+          onClick={handleReportCreation}
           type="button"
-          className="text-sm font-semibold leading-6 text-gray-900"
+          className="px-4 py-2 text-sm font-semibold text-white bg-indigo-600 rounded-md shadow-sm hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         >
-          Cancel
-        </button>
-        <button
-          type="submit"
-          className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-        >
-          Save
+          Create Report
         </button>
       </div>
+      {showConfirmation && (
+        <SuccessReport onClose={() => setShowConfirmation(false)} />
+      )}
     </form>
   );
 }
