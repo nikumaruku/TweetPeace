@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import axios from "axios";
 
 export default function UserStats() {
@@ -6,22 +7,25 @@ export default function UserStats() {
   const [numTweetAnalysed, setNumTweetAnalysed] = useState(0);
   const [numTweetSaved, setNumTweetsSaved] = useState(0);
 
+  const search = useLocation().search;
+  const username = new URLSearchParams(search).get("username");
+
   useEffect(() => {
     // Fetch number of reports
-    axios.get("http://localhost:3001/report/numReports").then((response) => {
+    axios.get(`http://localhost:3001/report/numReports/${username}`).then((response) => {
       setNumReports(response.data.numReports);
     });
 
     // Fetch number of tweets saved
-    axios.get("http://localhost:3001/saveTweet/total").then((response) => {
-      setNumTweetsSaved(response.data.numTweetSaved);
+    axios.get(`http://localhost:3001/saveTweet/total/${username}`).then((response) => {
+      setNumTweetsSaved(response.data.numTweetsSaved);
     });
 
     // Fetch number of tweets analysed
-    axios.get("http://localhost:3001/tweet/analysedTweet").then((response) => {
+    axios.get(`http://localhost:3001/tweet/analysedTweet/${username}`).then((response) => {
       setNumTweetAnalysed(response.data.numTweets);
     });
-  }, []);
+  }, [username]);
 
   const stats = [
     { name: "Reported Incidents", value: numReports },

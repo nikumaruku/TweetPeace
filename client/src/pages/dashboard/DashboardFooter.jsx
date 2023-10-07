@@ -1,4 +1,13 @@
-const navigation = [
+const navigation = {
+  main: [
+    // { name: 'About', href: '#' },
+    // { name: 'Blog', href: '#' },
+    // { name: 'Jobs', href: '#' },
+    // { name: 'Press', href: '#' },
+    // { name: 'Accessibility', href: '#' },
+    // { name: 'Partners', href: '#' },
+  ],
+  social: [
     // {
     //   name: 'Facebook',
     //   href: '#',
@@ -35,8 +44,8 @@ const navigation = [
     //   ),
     // },
     {
-      name: 'GitHub',
-      href: '#',
+      name: "GitHub",
+      href: "#",
       icon: (props) => (
         <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
           <path
@@ -60,28 +69,40 @@ const navigation = [
     //     </svg>
     //   ),
     // },
-  ]
-  
-  export default function DashboardFooter() {
-    return (
-      <footer className="bg-white">
-        <div className="mx-auto max-w-7xl px-6 py-12 md:flex md:items-center md:justify-between lg:px-8">
-          <div className="flex justify-center space-x-6 md:order-2">
-            {navigation.map((item) => (
-              <a key={item.name} href={item.href} className="text-gray-400 hover:text-gray-500">
-                <span className="sr-only">{item.name}</span>
-                <item.icon className="h-6 w-6" aria-hidden="true" />
+  ],
+};
+
+export default function Example() {
+  return (
+    <footer className="bg-white">
+      <div className="mx-auto max-w-7xl overflow-hidden px-2 py-2 sm:py-2 lg:px-2 ">
+        {/* <nav className="-mb-6 columns-2 sm:flex sm:justify-center sm:space-x-12" aria-label="Footer">
+          {navigation.main.map((item) => (
+            <div key={item.name} className="pb-6">
+              <a href={item.href} className="text-sm leading-6 text-gray-600 hover:text-gray-900">
+                {item.name}
               </a>
-            ))}
-          </div>
-          <div className="mt-8 md:order-1 md:mt-0">
-            <p className="text-center text-xs leading-5 text-gray-500">
-              &copy; 2023 TweetPeace Inc. All rights reserved.
-            </p>
-          </div>
+            </div>
+          ))}
+        </nav> */}
+        <p className="mt-5 text-center text-xs leading-5 text-gray-500">
+          &copy; 2023 TweetPeace. All rights reserved.
+        </p>
+        <div className="mt-5 mb-5 flex justify-center space-x-10">
+          {navigation.social.map((item) => (
+            <a
+              key={item.name}
+              href={item.href}
+              className="text-gray-400 hover:text-gray-500"
+            >
+              <span className="sr-only">{item.name}</span>
+              <item.icon className="h-6 w-6" aria-hidden="true" />
+            </a>
+          ))}
         </div>
-      </footer>
-    )
-  }
-  
-  /* 交流QQ群:七五四五七377八 */
+      </div>
+    </footer>
+  );
+}
+
+/* 交流QQ群:七545七377八 */
