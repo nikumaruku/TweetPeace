@@ -7,6 +7,11 @@ const TwitterThreadSchema = mongoose.Schema({
   },
   threadId: [String],
   tweets: [String],
+  // user: {
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   ref: "users", // Reference to the 'User' model
+  //   required: true,
+  // },
 });
 
 export const TwitterThreadModel = mongoose.model(

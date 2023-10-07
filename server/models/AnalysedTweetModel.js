@@ -4,11 +4,16 @@ const AnalysedTweetSchema = mongoose.Schema({
   tweetLink: {
     type: String,
     required: true,
-    unique: true, // Ensures that each tweet link is unique
+    unique: true,
   },
   createdAt: {
     type: Date,
     default: Date.now,
+  },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "users", 
+    required: true,
   },
 });
 

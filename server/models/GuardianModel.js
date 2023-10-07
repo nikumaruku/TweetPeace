@@ -27,11 +27,11 @@ const GuardianSchema = mongoose.Schema({
       message: "Phone number must be in the format XXX-XXX-XXXX",
     },
   },
-  // userId: {
-  //   type: mongoose.Schema.Types.ObjectId,
-  //   ref: 'User', // Reference to the User model (assuming you have a User model)
-  //   required: true,
-  // },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "users", // Reference to the 'User' model
+    required: true,
+  },
 });
 
 export const GuardianModel = mongoose.model("guardian", GuardianSchema);

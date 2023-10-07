@@ -21,11 +21,11 @@ const SavedTweetSchema = mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-  // user: {
-  //   type: mongoose.Schema.Types.ObjectId,
-  //   ref: "users",
-  //   // required: true,
-  // },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "users", // Reference to the 'User' model
+    required: true,
+  },
 });
 
 export const SavedTweetModel = mongoose.model("savedTweet", SavedTweetSchema);

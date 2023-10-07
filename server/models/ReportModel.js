@@ -15,12 +15,17 @@ const ReportSchema = mongoose.Schema({
     required: true,
   },
   screenshot: {
-    type: String, // You can store the file path or URL here
+    type: String, 
     required: true,
   },
   createdAt: {
     type: Date,
     default: Date.now,
+  },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "users", 
+    required: true,
   },
 });
 
