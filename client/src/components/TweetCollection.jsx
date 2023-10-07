@@ -1,16 +1,28 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+// import { useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+
 import FeedbackForm from "./FeedbackForm";
 import ContactGuardian from "./ContactGuardian";
 
 export default function TweetCollection() {
   const [savedTweets, setSavedTweets] = useState([]);
-  const { username } = useParams();
+  // const { username } = useParams();
+  const search = useLocation().search;
+  const username = new URLSearchParams(search).get("username");
+
+  // useEffect(() => {
+  //   axios
+  //     .get(`http://localhost:3001/saveTweet?username=${username}`)
+  //     .then((response) => {
+  //       setSavedTweets(response.data);
+  //     });
+  // }, [username]);
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3001/saveTweet?username=${username}`)
+      .get(`http://localhost:3001/saveTweet/${username}`)
       .then((response) => {
         setSavedTweets(response.data);
       });
