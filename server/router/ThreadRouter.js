@@ -8,9 +8,9 @@ const sentiment = new Sentiment();
 
 router.post("/analyse", async (req, res) => {
   try {
-    const { username } = req.body;
+    const { tweetUser } = req.body;
 
-    const threadData = await TwitterThreadModel.findOne({ username });
+    const threadData = await TwitterThreadModel.findOne({ tweetUser });
 
     if (!threadData) {
       return res.status(404).json({ message: "Thread data not found for the user." });
@@ -32,7 +32,7 @@ router.post("/analyse", async (req, res) => {
 
 router.post("/obtain", async (req, res) => {
   try {
-    const { username, threadUrls } = req.body;
+    const { tweetUser, threadUrls } = req.body;
 
     const threadIds = [];
 
@@ -45,7 +45,7 @@ router.post("/obtain", async (req, res) => {
     const tweetContents = await fetchThreadContent(threadUrls);
 
     const twitterThread = new TwitterThreadModel({
-      username: username,
+      username: tweetUser,
       threadId: threadIds,
       tweets: tweetContents,
     });
