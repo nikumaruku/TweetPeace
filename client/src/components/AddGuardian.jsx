@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import axios from "axios";
 
 const AddGuardian = () => {
   const navigate = useNavigate();
+  const search = useLocation().search;
+  const user = new URLSearchParams(search).get("username");
 
   const [guardianData, setGuardianData] = useState({
     name: "",
@@ -23,9 +26,13 @@ const AddGuardian = () => {
     e.preventDefault();
 
     try {
-      await axios.post("http://localhost:3001/guardians/create", guardianData);
+      await axios.post(
+        `http://localhost:3001/guardians/create/${user}`,
+        guardianData,
+        user
+      );
       alert("Guardians contact info has been saved!");
-      navigate("/dashboard");
+      navigate(`/dashboard?username=${user}`);
     } catch (error) {
       console.error("Error adding guardian:", error);
     }
@@ -100,7 +107,7 @@ const AddGuardian = () => {
             </div>
 
             <div className="mt-6 flex items-center justify-end gap-x-6">
-              <Link to={"/dashboard"}>
+              <Link to={`/dashboard?username=${user}`}>
                 <button
                   type="button"
                   className="text-sm font-semibold leading-6 text-gray-900"

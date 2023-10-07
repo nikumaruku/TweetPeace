@@ -1,13 +1,9 @@
 import { useState, useEffect } from "react";
-// import { transporter } from "../../../server/module/emailService.js";
 import axios from "axios";
-
 
 const ContactGuardian = ({ setIsContactOpen, savedTweet }) => {
   const [guardians, setGuardians] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  
-
 
   const fetchGuardianInfo = async () => {
     try {
@@ -25,32 +21,36 @@ const ContactGuardian = ({ setIsContactOpen, savedTweet }) => {
     }
   };
 
-  // const sendEmailToGuardian = async (guardianEmail, tweetContent) => {
-  //   const subject = "Regarding Saved Tweet";
-  //   const text = `Here is the saved tweet content:\n\n${tweetContent}`;
+  const sendEmailToGuardian = async (guardianEmail, savedTweet) => {
+    const subject = "Regarding Saved Tweet";
+    const { tweetContent, analysisResult, savedAt } = savedTweet;
 
-  //   const mailOptions = {
-  //     from: "yourapp@example.com", // Replace with your app's email
-  //     to: guardianEmail,
-  //     subject: subject,
-  //     text: text,
-  //   };
+    const message = `
+    Here is the saved tweet content:
+    Tweet Link: ${tweetContent}
+    Score: ${analysisResult.score}
+    Overall Sentiment: ${analysisResult.overallSentiment}
+    Tweet Category: ${analysisResult.tweetCategory}
+    Negative Word Count: ${analysisResult.negativeWordCount}
+    Saved At: ${new Date(savedAt).toLocaleDateString()}
+  `;
 
-  //   try {
-  //     // Send email
-  //     await transporter.sendMail(mailOptions);
-  //     console.log("Email sent successfully");
-  //     // Handle success or provide feedback to the user
-  //   } catch (error) {
-  //     console.error("Error sending email:", error);
-  //     // Handle errors and provide appropriate error messages
-  //   }
-  // };
+    try {
+      const response = await axios.post(
+        "http://localhost:3001/email/send-email",
+        {
+          recipientEmail: guardianEmail,
+          subject,
+          message,
+        }
+      );
 
-  // // Handle "Email tweet" button click
-  // const handleEmailTweet = (guardianEmail, tweetContent) => {
-  //   sendEmailToGuardian(guardianEmail, tweetContent);
-  // };
+      alert(`Email sent successfully. You can view your email at ${response.data.preview}!`);
+      // console.log(response.data.preview);
+    } catch (error) {
+      console.error("Error sending email:", error);
+    }
+  };
 
   useEffect(() => {
     fetchGuardianInfo();
@@ -74,12 +74,9 @@ const ContactGuardian = ({ setIsContactOpen, savedTweet }) => {
                     <p className="text-gray-600">{guardian.email}</p>
                     <p className="text-gray-600">{guardian.phone}</p>
                     <button
-                      // onClick={() =>
-                      //   handleEmailTweet(
-                      //     guardian.email,
-                      //     savedTweet.tweetContent
-                      //   )
-                      // }
+                      onClick={() =>
+                        sendEmailToGuardian(guardian.email, savedTweet)
+                      }
                       className="mt-3 rounded-md bg-indigo-50 px-3.5 py-2.5 text-sm font-semibold text-indigo-600 shadow-sm hover:bg-indigo-100"
                     >
                       Email tweet
