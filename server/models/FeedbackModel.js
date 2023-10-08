@@ -19,11 +19,11 @@ const feedbackSchema = mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-  // user: {
-  //   type: mongoose.Schema.Types.ObjectId,
-  //   ref: "users", // Reference to the 'User' model
-  //   required: true,
-  // },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "users",
+    required: true,
+  },
 });
 
-export const FeedbackModel = mongoose.model("Feedback", feedbackSchema);
+export const FeedbackModel = mongoose.model("feedback", feedbackSchema);

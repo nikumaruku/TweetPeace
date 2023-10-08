@@ -1,10 +1,14 @@
 import { useState } from "react";
 import axios from "axios";
+import { useLocation } from "react-router-dom";
 
 const FeedbackForm = ({ setIsFeedbackOpen, tweetId }) => {
   const [rating, setRating] = useState(0);
   const [feedbackText, setFeedbackText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  const search = useLocation().search;
+  const user = new URLSearchParams(search).get("username");
 
   const handleFeedbackSubmit = async () => {
     try {
@@ -16,16 +20,17 @@ const FeedbackForm = ({ setIsFeedbackOpen, tweetId }) => {
 
       const Feedback = existingFeedback.data;
 
-      if (Feedback.length >= 2) {
-        alert("Tweet has already been analysed!");
+      if (Feedback.length > 0) {
+        alert("You have already provide feedback for this tweet!");
         setIsFeedbackOpen(false);
       } else {
         const response = await axios.post(
-          "http://localhost:3001/feedback/create",
+          `http://localhost:3001/feedback/create/${user}`,
           {
             tweetId,
             rating,
             feedbackText,
+            user
           }
         );
 

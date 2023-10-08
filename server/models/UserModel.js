@@ -46,6 +46,12 @@ const UserSchema = mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "report",
   },
+  feedbacks: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "feedback",
+    },
+  ],
 });
 
 export const UserModel = mongoose.model("users", UserSchema);
