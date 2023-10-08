@@ -47,7 +47,7 @@ router.get("/obtain/:username", async (req, res) => {
     const username = req.params.username;
     const user = await UserModel.findOne({ username });
 
-    const guardians = await GuardianModel.find({ user: user._id });
+    const guardians = await GuardianModel.find({ user });
 
     if (!guardians || guardians.length === 0) {
       return res.status(404).json({ message: "No guardians found." });

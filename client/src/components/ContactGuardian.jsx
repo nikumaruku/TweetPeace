@@ -1,16 +1,20 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const ContactGuardian = ({ setIsContactOpen, savedTweet }) => {
   const [guardians, setGuardians] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+
+  const search = useLocation().search;
+  const user = new URLSearchParams(search).get("username");
 
   const fetchGuardianInfo = async () => {
     try {
       setIsLoading(true);
 
       const response = await axios.get(
-        "http://localhost:3001/guardians/obtain"
+        `http://localhost:3001/guardians/obtain/${user}`
       );
 
       setGuardians(response.data);
@@ -45,8 +49,8 @@ const ContactGuardian = ({ setIsContactOpen, savedTweet }) => {
         }
       );
 
-      alert(`Email sent successfully. You can view your email at ${response.data.preview}!`);
-      // console.log(response.data.preview);
+      alert(`Email sent successfully. Link: ${response.data.preview}!`);
+      console.log(response.data.preview);
     } catch (error) {
       console.error("Error sending email:", error);
     }
