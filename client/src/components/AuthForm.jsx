@@ -73,9 +73,9 @@ const AuthForm = ({
                     >
                       Sign in
                     </button>
-                    <Link to="/dashboard">
+                    {/* <Link to="/dashboard">
                       <button>Tekan sini</button>
-                    </Link>
+                    </Link> */}
 
                     <div className="flex items-center justify-center mt-6 space-x-6">
                       <Link to="/register">

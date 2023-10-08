@@ -20,7 +20,6 @@ export default function UserContent() {
   const [hasGuardianDetails, setHasGuardianDetails] = useState(false);
 
   useEffect(() => {
-    // Check if guardian details exist for the user
     axios
       .get(`http://localhost:3001/guardians/obtain/${username}`)
       .then((response) => {
