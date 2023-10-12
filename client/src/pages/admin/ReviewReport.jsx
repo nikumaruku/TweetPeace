@@ -28,13 +28,13 @@ export default function ReviewReport() {
   return (
     <ul role="list" className="divide-y divide-gray-200">
       {savedReports.map((savedReport) => (
-        <TweetCard key={savedReport._id} savedTweet={savedReport} />
+        <ReportCard key={savedReport._id} savedTweet={savedReport} />
       ))}
     </ul>
   );
 }
 
-function TweetCard({ savedReport }) {
+function ReportCard({ savedReport }) {
   const [expanded, setExpanded] = useState(false);
 
   const [isReviewOpen, setIsReviewOpen] = useState(false);
@@ -52,7 +52,7 @@ function TweetCard({ savedReport }) {
 
   return (
     <>
-      {/* Profile dropdown */}
+      {/* Report dropdown */}
       <li key={savedReport._id} className="py-4">
         <div className="bg-white p-4 shadow-md rounded-lg">
           <div className="grid grid-cols-3 gap-4">

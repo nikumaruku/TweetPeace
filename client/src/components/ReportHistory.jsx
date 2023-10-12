@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
+// import ReviewReportModal from "../pages/admin/ReviewReportModal";
 
 export default function ReportHistory() {
   const [reports, setReports] = useState([]);
@@ -67,13 +68,14 @@ export default function ReportHistory() {
                 scope="col"
                 className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
               >
-                Created At
+                Review status
               </th>
-              <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-0">
+              {/* <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-0">
                 <span className="sr-only">Edit</span>
-              </th>
+              </th> */}
             </tr>
           </thead>
+          {/* Render report item */}
           <tbody className="divide-y divide-gray-200 bg-white">
             {reports.map((report) => (
               <tr key={report._id}>
@@ -101,15 +103,11 @@ export default function ReportHistory() {
                     View Screenshot
                   </a>
                 </td>
-                <td className="px-3 py-4 text-sm text-gray-500">
+                {/* <td className="px-3 py-4 text-sm text-gray-500">
                   {new Date(report.createdAt).toLocaleDateString()}
-                </td>
-                {/* <td className="py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                  <a href="#" className="text-indigo-600 hover:text-indigo-900">
-                    Edit
-                    <span className="sr-only">, {report.tweetLink}</span>
-                  </a>
                 </td> */}
+                <td>
+                </td>
               </tr>
             ))}
           </tbody>

@@ -45,7 +45,6 @@ const navigation = [
 ];
 
 const userNavigation = [
-  // { name: "Settings", icon: CogIcon, href: "/settings" },
   {
     name: "Sign Out",
     icon: ArrowLeftOnRectangleIcon,
@@ -71,14 +70,11 @@ export default function UserDashboard() {
 
   const [currentSection, setCurrentSection] = useState("Home");
   const [currentDateTime, setCurrentDateTime] = useState(new Date());
-  
 
   useEffect(() => {
     const intervalId = setInterval(() => {
       setCurrentDateTime(new Date());
     }, 1000);
-
-    // Clear the interval when the component unmounts
     return () => clearInterval(intervalId);
   }, []);
 

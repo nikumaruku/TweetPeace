@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { ArrowLeftCircleIcon } from "@heroicons/react/24/solid";
 
 const AuthForm = ({
   username,
@@ -23,9 +24,16 @@ const AuthForm = ({
               method="POST"
               onSubmit={onSubmit}
             >
+              {/* Login */}
               {label === "Login" && (
                 <>
                   <div>
+                  <Link to={"/"}>
+                    <ArrowLeftCircleIcon
+                      className="h-6 w-6 text-black"
+                      aria-hidden="true"
+                    />
+                  </Link>
                     <h2 className="mb-8 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
                       Sign in to your account
                     </h2>
@@ -65,7 +73,7 @@ const AuthForm = ({
                       />
                     </div>
                   </div>
-                  
+
                   <div>
                     <button
                       type="submit"
@@ -93,9 +101,16 @@ const AuthForm = ({
                 </>
               )}
 
+              {/* Register */}
               {label === "Register" && (
                 <>
                   <div>
+                  <Link to={"/login"}>
+                    <ArrowLeftCircleIcon
+                      className="h-6 w-6 text-black"
+                      aria-hidden="true"
+                    />
+                  </Link>
                     <h2 className="mb-8 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
                       Register
                     </h2>
