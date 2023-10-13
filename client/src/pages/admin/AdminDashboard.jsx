@@ -25,8 +25,8 @@ const DashboardHome = () => {
 
 const navigation = [
   { name: "Home", component: DashboardHome },
-  { name: "List of Users", component: RegisteredUsers },
-  { name: "Review Report", component: ReviewReport },
+  { name: "Users List", component: RegisteredUsers },
+  { name: "Report List", component: ReviewReport },
 ];
 
 const userNavigation = [
@@ -46,9 +46,9 @@ export default function AdminDashboard() {
 
   const renderComponent = () => {
     switch (currentSection) {
-      case "Review Report":
+      case "Report List":
         return <ReviewReport />;
-      case "List of Users":
+      case "Users List":
         return <RegisteredUsers />;
       default:
         return <DashboardHome />;
@@ -235,7 +235,7 @@ export default function AdminDashboard() {
           <header className="py-10">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
               <h1 className="text-3xl font-bold tracking-tight text-white">
-                Dashboard
+                Welcome back , Admin!
               </h1>
             </div>
           </header>
