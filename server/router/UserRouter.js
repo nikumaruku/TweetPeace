@@ -1,12 +1,13 @@
 import express from "express";
 import bcrypt from "bcrypt";
-import jwt from 'jsonwebtoken'
+import jwt from "jsonwebtoken";
+
 import { UserModel } from "../models/UserModel.js";
 
 const router = express.Router();
 
 function createToken(username) {
-  const token = jwt.sign({ username }, 'bully123', { expiresIn: '1h' });
+  const token = jwt.sign({ username }, "bully123", { expiresIn: "1h" });
   return token;
 }
 
@@ -43,7 +44,6 @@ router.post("/register", async (req, res) => {
 
     res.json({ message: "User has been successfully registered!" });
     createToken(username);
-    
   } catch (err) {
     console.log(err);
     res.json({ message: "An error has occured. Please try again!" });
@@ -78,4 +78,14 @@ router.post("/login", async (req, res) => {
   }
 });
 
+//Fetch users
+router.get("/users", async (req, res) => {
+  try {
+    const users = await UserModel.find();
+    res.status(200).json(users);
+  } catch (error) {
+    console.error("Error fetching reports:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
 export { router as UserRouter };
