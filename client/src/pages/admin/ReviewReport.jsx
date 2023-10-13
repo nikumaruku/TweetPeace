@@ -1,34 +1,20 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
 import ReportPopUp from "./ReportPopUp";
 
 export default function ReviewReport() {
   const [savedReports, setSavedReports] = useState([]);
-  // const { username } = useParams();
-  // const search = useLocation().search;
-  // const username = new URLSearchParams(search).get("username");
 
-  // useEffect(() => {
-  //   axios
-  //     .get(`http://localhost:3001/saveTweet?username=${username}`)
-  //     .then((response) => {
-  //       setSavedTweets(response.data);
-  //     });
-  // }, [username]);
-
-  // useEffect(() => {
-  //   axios
-  //     .get(`http://localhost:3001/saveTweet/${username}`)
-  //     .then((response) => {
-  //       setSavedTweets(response.data);
-  //     });
-  // }, [username]);
+  useEffect(() => {
+    axios.get(`http://localhost:3001/report`).then((response) => {
+      setSavedReports(response.data);
+    });
+  }, []);
 
   return (
     <ul role="list" className="divide-y divide-gray-200">
       {savedReports.map((savedReport) => (
-        <ReportCard key={savedReport._id} savedTweet={savedReport} />
+        <ReportCard key={savedReport._id} savedReport={savedReport} />
       ))}
     </ul>
   );
@@ -36,15 +22,18 @@ export default function ReviewReport() {
 
 function ReportCard({ savedReport }) {
   const [expanded, setExpanded] = useState(false);
-
   const [isReviewOpen, setIsReviewOpen] = useState(false);
   const [selectedReportId, setSelectedReportId] = useState(null);
 
-  function extractUser(tweetContent) {
-    const twitterUrlRegex = /https:\/\/twitter.com\/([^/]+)\//;
-    const match = tweetContent.match(twitterUrlRegex);
-    return match ? match[1] : "Unknown";
-  }
+  const [username, setUsername] = useState(null);
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:3001/report/username/${savedReport.user}`)
+      .then((response) => {
+        setUsername(response.data.username);
+      });
+  }, []);
 
   const toggleExpanded = () => {
     setExpanded(!expanded);
@@ -57,8 +46,8 @@ function ReportCard({ savedReport }) {
         <div className="bg-white p-4 shadow-md rounded-lg">
           <div className="grid grid-cols-3 gap-4">
             <div className="col-span-2">
-              <h3 className="text-lg font-semibold text-gray-900">
-                Report by {extractUser(savedReport.user)}
+              <h3 className="text-lg font-medium text-gray-900">
+                <strong> Reported by</strong> {username ? username : "null"}
               </h3>
               <p className="mt-2 text-sm text-gray-700">
                 <strong></strong> {savedReport.tweetLink}
@@ -82,11 +71,12 @@ function ReportCard({ savedReport }) {
                 <strong>Description:</strong> {savedReport.description}
               </p>
               <p className="text-sm text-gray-700">
-                <strong>Screenshot:</strong> {savedReport.screenshot}
+                {/* <strong>Screenshot:</strong> {savedReport.screenshot} */}
+                <strong>Screenshot:</strong> No data yet
               </p>
-              <p className="mt-2 text-sm text-gray-700">
+              <p className="text-sm text-gray-700">
                 <strong>Reported At:</strong>{" "}
-                {new Date(savedReport.savedAt).toLocaleDateString()}
+                {new Date(savedReport.createdAt).toLocaleDateString()}
               </p>
 
               <div className="space-x-3">
@@ -95,7 +85,6 @@ function ReportCard({ savedReport }) {
                     setIsReviewOpen(true);
                     setSelectedReportId(savedReport._id);
                   }}
-                  // disabled={savedTweet.reviewed}
                   className="mt-3 rounded-md bg-indigo-50 px-3.5 py-2.5 text-sm font-semibold text-indigo-600 shadow-sm hover:bg-indigo-100"
                 >
                   Review report

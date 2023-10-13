@@ -1,14 +1,14 @@
 const stats = [
-  { name: "Total Subscribers", stat: "71,897" },
-  { name: "Avg. Open Rate", stat: "58.16%" },
-  { name: "Avg. Click Rate", stat: "24.57%" },
+  { name: "Total Reports", stat: "10" },
+  { name: "Reports Reviewed", stat: "7" },
+  { name: "Unreviewed reports", stat: "3" },
 ];
 
 export default function ReportStats() {
   return (
     <div>
       <h3 className="text-base font-semibold leading-6 text-gray-900">
-        Users' Report Statistics
+        Report Statistics
       </h3>
       <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
         {stats.map((item) => (
