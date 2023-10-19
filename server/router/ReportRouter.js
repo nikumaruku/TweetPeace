@@ -93,7 +93,7 @@ router.get("/username/:id", async (req, res) => {
     const user = await UserModel.findById(id);
 
     if (!user) {
-      return res.status(404).json({ error: "User not found" });
+      return res.status(404).json({ error: "User not not found" });
     }
 
     const username = user.username;
@@ -101,6 +101,35 @@ router.get("/username/:id", async (req, res) => {
     res.status(200).json({ username });
   } catch (error) {
     console.error("Error fetching user:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+router.post("/verdict/:reportId", async (req, res) => {
+  try {
+    const { verdict, reasoning } = req.body;
+    const reportId = req.params.reportId;
+
+    const report = await ReportModel.findOne({ _id: reportId });
+
+    if (!report) {
+      return res.status(404).json({ error: "Report not found" });
+    }
+
+    if (!Array.isArray(report.reviewStatus)) {
+      report.reviewStatus = [];
+    }
+
+    report.reviewStatus.push({
+      verdict,
+      reasoning,
+    });
+
+    const updatedReport = await report.save();
+
+    res.status(200).json(updatedReport);
+  } catch (error) {
+    console.error("Error updating report:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 });
