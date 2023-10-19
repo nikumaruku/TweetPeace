@@ -1,19 +1,49 @@
 import { useState } from "react";
+import axios from "axios";
 
 export default function ReportPopUp({ setIsReviewOpen, reportId }) {
   const [verdict, setVerdict] = useState("");
   const [reasoning, setReasoning] = useState("");
 
-  const handleReview = (verdict) => {
-    // Implement your logic here based on the verdict (e.g., "Rejected" or "Approved")
-    // You can use the 'verdict' parameter to determine the selected option.
-    setIsReviewOpen(false);
+  const [rejectedClicked, setRejectedClicked] = useState(false);
+  const [approvedClicked, setApprovedClicked] = useState(false);
+
+  const handleReview = async () => {
+    try {
+      const data = {
+        verdict,
+        reasoning,
+      };
+
+      const response = await axios.post(
+        `http://localhost:3001/report/verdict/${reportId}`,
+        data
+      );
+
+      if (response.status === 200) {
+        setIsReviewOpen(false);
+        alert("Verdict submitted!");
+      } else {
+        console.error("Error submitting review");
+      }
+      
+    } catch (error) {
+      console.error("Error submitting review:", error);
+    }
+  };
+
+  const handleVerdictClick = (selectedVerdict) => {
+    setVerdict(selectedVerdict);
+
+    setRejectedClicked(selectedVerdict === "Rejected");
+    setApprovedClicked(selectedVerdict === "Approved");
   };
 
   return (
     <div>
       <div className="fixed inset-0 flex items-center justify-center z-50">
         <div className="bg-white rounded-lg p-6 w-96">
+          {/* Pop up div */}
           <div className="flex justify-end">
             <button
               onClick={() => setIsReviewOpen(false)}
@@ -38,21 +68,27 @@ export default function ReportPopUp({ setIsReviewOpen, reportId }) {
           <h2 className="text-lg font-semibold mb-4">Review Report</h2>
           <div className="mb-4">
             <div className="flex flex-col items-start mb-2">
-              <label
-                className="block mb-3 text-sm font-medium text-gray-700"
-              >
+              <label className="block mb-3 text-sm font-medium text-gray-700">
                 Verdict
               </label>
               <div className="flex ml-14 justify-center items-center space-x-2">
                 <button
-                  onClick={() => handleReview("Rejected")}
-                  className="px-4 py-2 bg-red-500 text-white font-semibold rounded-md hover:bg-red-600"
+                  onClick={() => handleVerdictClick("Rejected")}
+                  className={`px-4 py-2 font-semibold rounded-md hover:bg-red-600 ${
+                    rejectedClicked
+                      ? "bg-red-500 text-white"
+                      : "bg-white text-gray-700"
+                  }`}
                 >
                   Rejected
                 </button>
                 <button
-                  onClick={() => handleReview("Approved")}
-                  className="px-4 py-2 bg-green-500 text-white font-semibold rounded-md hover:bg-green-600"
+                  onClick={() => handleVerdictClick("Approved")}
+                  className={`px-4 py-2 font-semibold rounded-md hover-bg-green-600 ${
+                    approvedClicked
+                      ? "bg-green-500 text-white"
+                      : "bg-white text-gray-700"
+                  }`}
                 >
                   Approved
                 </button>
@@ -76,7 +112,7 @@ export default function ReportPopUp({ setIsReviewOpen, reportId }) {
             ></textarea>
           </div>
           <button
-            onClick={() => handleReview(verdict)}
+            onClick={() => handleReview()}
             className="w-full bg-indigo-600 text-white font-semibold py-2 rounded-md hover:bg-indigo-700"
           >
             Submit
