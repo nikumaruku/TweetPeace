@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+
 import ReportPopUp from "./ReportPopUp";
 
 export default function ReviewReport() {
@@ -23,8 +24,8 @@ export default function ReviewReport() {
 function ReportCard({ savedReport }) {
   const [expanded, setExpanded] = useState(false);
   const [isReviewOpen, setIsReviewOpen] = useState(false);
-  const [selectedReportId, setSelectedReportId] = useState(null);
 
+  const [selectedReportId, setSelectedReportId] = useState(null);
   const [username, setUsername] = useState(null);
 
   useEffect(() => {
