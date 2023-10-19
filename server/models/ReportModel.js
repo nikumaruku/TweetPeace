@@ -15,16 +15,22 @@ const ReportSchema = mongoose.Schema({
     required: true,
   },
   screenshot: {
-    type: String, 
+    type: String,
     required: true,
   },
+  reviewStatus: [
+    {
+      verdict: String,
+      reasoning: String,
+    },
+  ],
   createdAt: {
     type: Date,
     default: Date.now,
   },
   user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "users", 
+    ref: "users",
     required: true,
   },
 });
