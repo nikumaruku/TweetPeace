@@ -1,14 +1,24 @@
-
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
-// import ReviewReportModal from "../pages/admin/ReviewReportModal";
 
 export default function ReportHistory() {
   const [reports, setReports] = useState([]);
+  const [selectedReasoning, setSelectedReasoning] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const search = useLocation().search;
   const user = new URLSearchParams(search).get("username");
+
+  const openModal = (reasoning) => {
+    setSelectedReasoning(reasoning);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setSelectedReasoning("");
+    setIsModalOpen(false);
+  };
 
   useEffect(() => {
     axios.get(`http://localhost:3001/report/${user}`).then((response) => {
@@ -18,24 +28,6 @@ export default function ReportHistory() {
 
   return (
     <div className="px-4 sm:px-6 lg:px-8">
-      {/* <div className="sm:flex sm:items-center">
-        <div className="sm:flex-auto">
-          <h1 className="text-base font-semibold leading-6 text-gray-900">
-            Report History
-          </h1>
-          <p className="mt-2 text-sm text-gray-700">
-            A list of all the reports including their details.
-          </p>
-        </div>
-        <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-          <button
-            type="button"
-            className="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-          >
-            Add report
-          </button>
-        </div>
-      </div> */}
       <div className="mx-4 sm:-mx-0">
         <table className="min-w-full divide-y divide-gray-300">
           <thead>
@@ -68,13 +60,11 @@ export default function ReportHistory() {
                 scope="col"
                 className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
               >
-                Review status
+                Status
               </th>
-              {/* <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-0">
-                <span className="sr-only">Edit</span>
-              </th> */}
             </tr>
           </thead>
+
           {/* Render report item */}
           <tbody className="divide-y divide-gray-200 bg-white">
             {reports.map((report) => (
@@ -100,18 +90,59 @@ export default function ReportHistory() {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    View Screenshot
+                    View
                   </a>
                 </td>
-                {/* <td className="px-3 py-4 text-sm text-gray-500">
-                  {new Date(report.createdAt).toLocaleDateString()}
-                </td> */}
-                <td>
+                <td
+                  className="px-3 py-4 text-sm text-gray-500 verdict-cell"
+                  onClick={() => openModal(report.reviewStatus[0].reasoning)}
+                >
+                  {report.reviewStatus[0].verdict}
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
+
+        {/* Reasoning pop up */}
+        {isModalOpen && (
+          <div className="mb-10  fixed inset-0 flex items-center justify-center z-50">
+            <div className="bg-white border-2 border-black shadow-xl rounded-lg p-6 w-96">
+              <div className="flex justify-end">
+                <button
+                  onClick={closeModal}
+                  className="text-gray-500 hover:text-gray-700 focus:outline-none"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </button>
+              </div>
+              <h2 className="text-lg font-semibold mb-4">Verdict Status</h2>
+
+              <div className="mb-4">
+                <label
+                  htmlFor="reasoning"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Reasoning
+                </label>
+                <p>{selectedReasoning}</p>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
