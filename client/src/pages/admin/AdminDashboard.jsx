@@ -1,18 +1,17 @@
 import { useState, Fragment } from "react";
+import { useNavigate } from "react-router-dom";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
-import { Bars3Icon, BellIcon, XMarkIcon, ArrowLeftOnRectangleIcon } from "@heroicons/react/24/outline";
+import {
+  Bars3Icon,
+  XMarkIcon,
+  ArrowLeftOnRectangleIcon,
+  UserCircleIcon,
+} from "@heroicons/react/24/outline";
 
 import ReviewReport from "./ReviewReport";
 import RegisteredUsers from "./RegisteredUsers";
 import UserStats from "./UserStats";
 import ReportStats from "./ReportStats";
-
-const user = {
-  name: "Tom Cook",
-  email: "tom@example.com",
-  imageUrl:
-    "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-};
 
 const DashboardHome = () => {
   return (
@@ -23,26 +22,32 @@ const DashboardHome = () => {
   );
 };
 
-const navigation = [
-  { name: "Home", component: DashboardHome },
-  { name: "Users List", component: RegisteredUsers },
-  { name: "Report List", component: ReviewReport },
-];
-
-const userNavigation = [
-  {
-    name: "Sign Out",
-    icon: ArrowLeftOnRectangleIcon,
-    onClick: () => handleSignOut(),
-  },
-];
-
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function AdminDashboard() {
+  const navigate = useNavigate();
+
   const [currentSection, setCurrentSection] = useState("Home");
+
+  const navigation = [
+    { name: "Home", component: DashboardHome },
+    { name: "Users List", component: RegisteredUsers },
+    { name: "Report List", component: ReviewReport },
+  ];
+
+  const userNavigation = [
+    {
+      name: "Sign Out",
+      icon: ArrowLeftOnRectangleIcon,
+      onClick: () => handleSignOut(),
+    },
+  ];
+
+  const handleSignOut = () => {
+    navigate("/login");
+  };
 
   const renderComponent = () => {
     switch (currentSection) {
@@ -58,7 +63,7 @@ export default function AdminDashboard() {
   return (
     <>
       <div className="min-h-full">
-        <div className="bg-gray-800 pb-32">
+        <div className="bg-gray-800 pb-36">
           <Disclosure as="nav" className="bg-gray-800">
             {({ open }) => (
               <>
@@ -66,15 +71,8 @@ export default function AdminDashboard() {
                   <div className="border-b border-gray-700">
                     <div className="flex h-16 items-center justify-between px-4 sm:px-0">
                       <div className="flex items-center">
-                        <div className="flex-shrink-0">
-                          <img
-                            className="h-8 w-8"
-                            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                            alt="Your Company"
-                          />
-                        </div>
                         <div className="hidden md:block">
-                          <div className="ml-10 flex items-baseline space-x-4">
+                          <div className=" flex items-baseline space-x-4">
                             {navigation.map((item) => (
                               <a
                                 key={item.name}
@@ -96,26 +94,13 @@ export default function AdminDashboard() {
                       </div>
                       <div className="hidden md:block">
                         <div className="ml-4 flex items-center md:ml-6">
-                          <button
-                            type="button"
-                            className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-                          >
-                            <span className="absolute -inset-1.5" />
-                            <span className="sr-only">View notifications</span>
-                            {/* <BellIcon className="h-6 w-6" aria-hidden="true" /> */}
-                          </button>
-
                           {/* Profile dropdown */}
                           <Menu as="div" className="relative ml-3">
                             <div>
                               <Menu.Button className="relative flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                                 <span className="absolute -inset-1.5" />
                                 <span className="sr-only">Open user menu</span>
-                                <img
-                                  className="h-8 w-8 rounded-full"
-                                  src={user.imageUrl}
-                                  alt=""
-                                />
+                                <UserCircleIcon className="h-8 w-8 rounded-full bg-white" />
                               </Menu.Button>
                             </div>
                             <Transition
@@ -131,15 +116,31 @@ export default function AdminDashboard() {
                                 {userNavigation.map((item) => (
                                   <Menu.Item key={item.name}>
                                     {({ active }) => (
-                                      <a
-                                        href={item.href}
-                                        className={classNames(
-                                          active ? "bg-gray-100" : "",
-                                          "block px-4 py-2 text-sm text-gray-700"
+                                      <>
+                                        {item.href ? (
+                                          <a
+                                            href={item.href}
+                                            className={classNames(
+                                              active ? "bg-gray-100" : "",
+                                              "block px-4 py-2 text-sm text-gray-700"
+                                            )}
+                                          >
+                                            <item.icon className="h-5 w-5 inline mr-2" />{" "}
+                                            {item.name}
+                                          </a>
+                                        ) : (
+                                          <button
+                                            onClick={item.onClick}
+                                            className={classNames(
+                                              active ? "bg-gray-100" : "",
+                                              "block px-4 py-2 text-sm text-gray-700"
+                                            )}
+                                          >
+                                            <item.icon className="h-5 w-5 inline mr-2" />{" "}
+                                            {item.name}
+                                          </button>
                                         )}
-                                      >
-                                        {item.name}
-                                      </a>
+                                      </>
                                     )}
                                   </Menu.Item>
                                 ))}
@@ -190,7 +191,7 @@ export default function AdminDashboard() {
                     ))}
                   </div>
                   <div className="border-t border-gray-700 pb-3 pt-4">
-                    <div className="flex items-center px-5">
+                    {/* <div className="flex items-center px-5">
                       <div className="flex-shrink-0">
                         <img
                           className="h-10 w-10 rounded-full"
@@ -212,9 +213,9 @@ export default function AdminDashboard() {
                       >
                         <span className="absolute -inset-1.5" />
                         <span className="sr-only">View notifications</span>
-                        {/* <BellIcon className="h-6 w-6" aria-hidden="true" /> */}
+                    
                       </button>
-                    </div>
+                    </div> */}
                     <div className="mt-3 space-y-1 px-2">
                       {userNavigation.map((item) => (
                         <Disclosure.Button
@@ -235,7 +236,7 @@ export default function AdminDashboard() {
           <header className="py-10">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
               <h1 className="text-3xl font-bold tracking-tight text-white">
-                Welcome back , Admin!
+                Welcome back, Admin!
               </h1>
             </div>
           </header>

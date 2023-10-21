@@ -53,10 +53,7 @@ const userNavigation = [
 ];
 
 const handleSignOut = () => {
-  // Remove the token from local storage
   localStorage.removeItem("token");
-
-  // Redirect to the login page or any other appropriate action
   window.location.href = "/login";
 };
 
@@ -105,7 +102,7 @@ export default function UserDashboard() {
 
   return (
     <>
-      <div className="min-h-full" >
+      <div className="min-h-full">
         <Disclosure as="nav" className="bg-gray-800">
           {({ open }) => (
             <>

@@ -24,7 +24,7 @@ const Login = () => {
 
       setUsername(res.data.username)
       const token = res.data.token;
-      localStorage.setItem("token", token); //JWT stuff
+      localStorage.setItem("token", token); 
       
       navigate(`/dashboard?username=${username}`);
    

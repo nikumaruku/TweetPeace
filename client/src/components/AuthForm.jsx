@@ -28,12 +28,12 @@ const AuthForm = ({
               {label === "Login" && (
                 <>
                   <div>
-                  <Link to={"/"}>
-                    <ArrowLeftCircleIcon
-                      className="h-6 w-6 text-black"
-                      aria-hidden="true"
-                    />
-                  </Link>
+                    <Link to={"/"}>
+                      <ArrowLeftCircleIcon
+                        className="h-6 w-6 text-black"
+                        aria-hidden="true"
+                      />
+                    </Link>
                     <h2 className="mb-8 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
                       Sign in to your account
                     </h2>
@@ -92,9 +92,11 @@ const AuthForm = ({
                         </a>
                       </Link>
                       <p> | </p>
-                      <a className="text-sm font-semibold text-indigo-600 hover:text-indigo-500">
-                        Forgot password?
-                      </a>
+                      <Link to="/admin">
+                        <a className="text-sm font-semibold text-indigo-600 hover:text-indigo-500">
+                          An admin?
+                        </a>
+                      </Link>
                     </div>
                   </div>
                   <div></div>
@@ -105,12 +107,12 @@ const AuthForm = ({
               {label === "Register" && (
                 <>
                   <div>
-                  <Link to={"/login"}>
-                    <ArrowLeftCircleIcon
-                      className="h-6 w-6 text-black"
-                      aria-hidden="true"
-                    />
-                  </Link>
+                    <Link to={"/login"}>
+                      <ArrowLeftCircleIcon
+                        className="h-6 w-6 text-black"
+                        aria-hidden="true"
+                      />
+                    </Link>
                     <h2 className="mb-8 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
                       Register
                     </h2>
