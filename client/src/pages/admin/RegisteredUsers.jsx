@@ -1,53 +1,7 @@
-// import { useState, useEffect } from "react";
-// import axios from "axios";
-
-// export default function RegisteredUsers() {
-//   const [userDatas, setUserDatas] = useState(null);
-
-//   useEffect(() => {
-//     axios.get(`http://localhost:3001/users`).then((response) => {
-//       setUserDatas(response.data);
-//     });
-//   }, []);
-
-//   return (
-//     <div>
-//       {userDatas ? (
-//         <ul role="list" className="divide-y divide-gray-100">
-//           {userDatas.map((person) => (
-//             <li key={person._id} className="flex justify-between gap-x-6 py-5">
-//               <div className="flex gap-x-4">
-//                 <div className="min-w-0 flex-auto">
-//                   <p className="text-sm font-semibold leading-6 text-gray-900">
-//                     {person.username}
-//                   </p>
-//                   <p className="mt-1 truncate text-xs leading-5 text-gray-500">
-//                     {person.email}
-//                   </p>
-//                 </div>
-//               </div>
-//               <div className="hidden sm:flex sm:flex-col sm:items-end">
-//                 <p className="text-sm leading-6 text-gray-900">{person.age} years old</p>
-//                 <div className="mt-1 flex items-center gap-x-1.5">
-//                   <div className="flex-none rounded-full bg-emerald-500/20 p-1">
-//                     {/* <div className="h-1.5 w-1.5 rounded-full bg-emerald-500" /> */}
-//                   </div>
-//                   <p className="text-xs leading-5 text-gray-500">User since 2019</p>
-//                 </div>
-//               </div>
-//             </li>
-//           ))}
-//         </ul>
-//       ) : (
-//         <p>Loading user data...</p>
-//       )}
-//     </div>
-//   );
-// }
 
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { EnvelopeIcon } from "@heroicons/react/20/solid";
+import { EnvelopeIcon, MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 
 export default function RegisteredUsers() {
   const [userDatas, setUserDatas] = useState(null);
@@ -114,15 +68,15 @@ export default function RegisteredUsers() {
                   Email
                 </a>
               </div>
-              {/* <div className="-ml-px flex w-0 flex-1">
+              <div className="-ml-px flex w-0 flex-1">
                 <a
                   href={`tel:${person.telephone}`}
                   className="relative inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-br-lg border border-transparent py-4 text-sm font-semibold text-gray-900"
                 >
-                  <PhoneIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
-                  Call
+                  <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                  Details
                 </a>
-              </div> */}
+              </div>
             </div>
           </div>
         </li>

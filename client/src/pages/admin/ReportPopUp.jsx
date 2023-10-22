@@ -42,7 +42,7 @@ export default function ReportPopUp({ setIsReviewOpen, reportId }) {
   return (
     <div>
       <div className="fixed inset-0 flex items-center justify-center z-50">
-        <div className="bg-white rounded-lg p-6 w-96">
+        <div className="bg-white rounded-lg p-6 w-96 shadow-xl">
           {/* Pop up div */}
           <div className="flex justify-end">
             <button
@@ -84,7 +84,7 @@ export default function ReportPopUp({ setIsReviewOpen, reportId }) {
                 </button>
                 <button
                   onClick={() => handleVerdictClick("Approved")}
-                  className={`px-4 py-2 font-semibold rounded-md hover-bg-green-600 ${
+                  className={`px-4 py-2 font-semibold rounded-md hover-bg-green-500 ${
                     approvedClicked
                       ? "bg-green-500 text-white"
                       : "bg-white text-gray-700"

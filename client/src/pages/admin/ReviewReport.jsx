@@ -1,6 +1,5 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-
 import ReportPopUp from "./ReportPopUp";
 
 export default function ReviewReport() {
@@ -13,7 +12,7 @@ export default function ReviewReport() {
   }, []);
 
   return (
-    <ul role="list" className="divide-y divide-gray-200">
+    <ul className="divide-y divide-gray-200">
       {savedReports.map((savedReport) => (
         <ReportCard key={savedReport._id} savedReport={savedReport} />
       ))}
@@ -24,7 +23,6 @@ export default function ReviewReport() {
 function ReportCard({ savedReport }) {
   const [expanded, setExpanded] = useState(false);
   const [isReviewOpen, setIsReviewOpen] = useState(false);
-
   const [selectedReportId, setSelectedReportId] = useState(null);
   const [username, setUsername] = useState(null);
 
@@ -42,8 +40,7 @@ function ReportCard({ savedReport }) {
 
   return (
     <>
-      {/* Report dropdown */}
-      <li key={savedReport._id} className="py-4">
+      <li className="py-4">
         <div className="bg-white p-4 shadow-md rounded-lg">
           <div className="grid grid-cols-3 gap-4">
             <div className="col-span-2">
@@ -72,7 +69,6 @@ function ReportCard({ savedReport }) {
                 <strong>Description:</strong> {savedReport.description}
               </p>
               <p className="text-sm text-gray-700">
-                {/* <strong>Screenshot:</strong> {savedReport.screenshot} */}
                 <strong>Screenshot:</strong> No data yet
               </p>
               <p className="text-sm text-gray-700">
@@ -92,7 +88,6 @@ function ReportCard({ savedReport }) {
                 </button>
               </div>
 
-              {/* Report pop-up */}
               {isReviewOpen && (
                 <ReportPopUp
                   setIsReviewOpen={setIsReviewOpen}
@@ -106,3 +101,4 @@ function ReportCard({ savedReport }) {
     </>
   );
 }
+
