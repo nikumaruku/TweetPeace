@@ -43,7 +43,6 @@ router.post("/create/:username", async (req, res) => {
 
 router.get("/obtain/:username", async (req, res) => {
   try {
-
     const username = req.params.username;
     const user = await UserModel.findOne({ username });
 

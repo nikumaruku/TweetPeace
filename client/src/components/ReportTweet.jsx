@@ -1,7 +1,6 @@
-// import axios from "axios";
+import axios from "axios";
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
-import axios from "axios";
 import ErrorReport from "./modals/ErrorReport";
 import SuccessReport from "./modals/SuccessReport";
 
@@ -86,7 +85,7 @@ export default function ReportTweet() {
 
   return (
     <form className="space-y-6 flex flex-col items-center justify-center">
-      <div className="border w-[70%] rounded-lg p-6">
+      <div className="border w-[70%] rounded-lg p-6 shadow-xl">
         <label className="block text-gray-900 text-sm font-medium">
           Tweet Link
         </label>

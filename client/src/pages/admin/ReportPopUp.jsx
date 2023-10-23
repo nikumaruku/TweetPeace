@@ -84,7 +84,7 @@ export default function ReportPopUp({ setIsReviewOpen, reportId }) {
                 </button>
                 <button
                   onClick={() => handleVerdictClick("Approved")}
-                  className={`px-4 py-2 font-semibold rounded-md hover-bg-green-500 ${
+                  className={`px-4 py-2 font-semibold rounded-md hover:bg-green-500 ${
                     approvedClicked
                       ? "bg-green-500 text-white"
                       : "bg-white text-gray-700"
