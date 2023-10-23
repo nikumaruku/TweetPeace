@@ -1,5 +1,5 @@
 import express from "express";
-import { SavedTweetModel } from "../models/SavedTweetModel.js"; // Import the Tweet model
+import { SavedTweetModel } from "../models/SavedTweetModel.js"; 
 import { UserModel } from "../models/UserModel.js";
 
 const router = express.Router();

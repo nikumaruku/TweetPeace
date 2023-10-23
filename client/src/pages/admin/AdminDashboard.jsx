@@ -63,7 +63,7 @@ export default function AdminDashboard() {
   return (
     <>
       <div className="min-h-full">
-        <div className="bg-gray-800 pb-32">
+        <div className="bg-gray-800 pb-28">
           <Disclosure as="nav" className="bg-gray-800">
             {({ open }) => (
               <>
