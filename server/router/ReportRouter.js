@@ -134,4 +134,14 @@ router.post("/verdict/:reportId", async (req, res) => {
   }
 });
 
+router.get("/report/reportsCount", async (req, res) => {
+  try {
+    const reportsCount = await ReportModel.countDocuments();
+    res.json({ reportsCount });
+  } catch (error) {
+    console.error("Error fetching reports count:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 export { router as ReportRouter };
