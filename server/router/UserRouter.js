@@ -88,4 +88,16 @@ router.get("/users", async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 });
+
+//Fetch total users count
+router.get("/users/count", async (req, res) => {
+  try {
+    const userCount = await UserModel.countDocuments();
+    res.json({ userCount });
+  } catch (error) {
+    console.error("Error fetching user count:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 export { router as UserRouter };

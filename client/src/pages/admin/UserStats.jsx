@@ -1,17 +1,21 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Chart from "chart.js/auto";
-
-const stats = [
-  { name: "Registered Users", stat: "3" },
-  { name: "Active users", stat: "1" },
-  { name: "Unique Visitors", stat: "15" },
-];
 
 export default function UserStats() {
   const chartRef = useRef(null);
   const chartInstance = useRef(null);
+  const [userCount, setUserCount] = useState(0); 
 
   useEffect(() => {
+    fetch(`http://localhost:3001/users/count`)
+      .then((response) => response.json())
+      .then((data) => {
+        setUserCount(data.userCount); 
+      })
+      .catch((error) => {
+        console.error("Error fetching user count:", error);
+      });
+
     if (chartRef.current) {
       const ctx = chartRef.current.getContext("2d");
 
@@ -19,8 +23,9 @@ export default function UserStats() {
         chartInstance.current.destroy();
       }
 
-      const labels = stats.map((item) => item.name);
-      const data = stats.map((item) => Number(item.stat));
+      const labels = ["Registered", "Active", "Unique Visitors"];
+
+      const data = [userCount, 1, 15]; 
 
       chartInstance.current = new Chart(ctx, {
         type: "bar",
@@ -28,9 +33,9 @@ export default function UserStats() {
           labels: labels,
           datasets: [
             {
-              label: "Statistics",
+              label: "User Count",
               data: data,
-              backgroundColor: ["#63B3ED", "#93C5FD", "#A5B4FC"],
+              backgroundColor: ["#63B3ED", "#93C5FD", "#A5B4FC", "#FF0000"], 
             },
           ],
         },
@@ -45,7 +50,7 @@ export default function UserStats() {
         },
       });
     }
-  }, []);
+  }, [userCount]); 
 
   return (
     <div className="mb-8">
