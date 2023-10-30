@@ -54,7 +54,6 @@ router.get("/obtain/:username", async (req, res) => {
 
     res.status(200).json(guardians);
   } catch (error) {
-    // Handle any errors that occur during the database query
     console.error("Error obtaining guardian information:", error);
     res.status(500).json({ message: "Internal server error" });
   }

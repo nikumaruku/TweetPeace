@@ -26,7 +26,6 @@ export default function SuccessReport() {
             <Dialog.Overlay className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
           </Transition.Child>
 
-          {/* This element is to trick the browser into centering the modal contents. */}
           <span
             className="hidden sm:inline-block sm:align-middle sm:h-screen"
             aria-hidden="true"
@@ -59,7 +58,7 @@ export default function SuccessReport() {
                   </Dialog.Title>
                   <div className="mt-2">
                     <p className="text-sm text-gray-500">
-                      Our moderators will review your report ASAP
+                      Our moderators will review your report soon enough! 
                     </p>
                   </div>
                 </div>

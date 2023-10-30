@@ -104,5 +104,3 @@ export default function Example() {
     </footer>
   );
 }
-
-/* 交流QQ群:七545七377八 */
