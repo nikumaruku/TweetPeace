@@ -30,13 +30,12 @@ function App() {
               <ProtectedRoute>
                 <UserDashboard />
               </ProtectedRoute>
-              // <UserDashboard/>
             }
           />
           <Route path="/settings" element={<Settings />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/guardian" element={<AddGuardian />} />
-          <Route path="/testing" element={<DisplayGuardian />} />
+          <Route path="/guardian-info" element={<DisplayGuardian />} />
           <Route path="/admin" element={<AdminDashboard />} />
         </Routes>
       </BrowserRouter>

@@ -3,8 +3,6 @@ import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const DisplayGuardian = () => {
-  //   const [isLoading, setIsLoading] = useState(false);
-  //   const [error, setError] = useState("");
   const [guardianDatas, setGuardianDatas] = useState([]);
   const [editedGuardian, setEditedGuardian] = useState(null);
 
@@ -23,17 +21,14 @@ const DisplayGuardian = () => {
   }, [user]);
 
   const handleEdit = (guardianId) => {
-    // Find the guardian to edit by guardianId
     const guardianToEdit = guardianDatas.find(
       (guardian) => guardian._id === guardianId
     );
 
-    // Set the editedGuardian state to the guardian to edit
     setEditedGuardian(guardianToEdit);
   };
 
   const handleCancelEdit = () => {
-    // Clear the editedGuardian state to cancel editing
     setEditedGuardian(null);
   };
 
@@ -52,7 +47,6 @@ const DisplayGuardian = () => {
           navigate(`/testing?username=${user}`);
         })
         .catch((error) => {
-          // Handle errors, e.g., show an error message
           console.error("Error updating guardian:", error);
         });
     }

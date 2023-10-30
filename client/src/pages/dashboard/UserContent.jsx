@@ -32,7 +32,7 @@ export default function UserContent() {
   }, [username]);
 
   const guardianHref = hasGuardianDetails
-    ? `/testing?username=${username}`
+    ? `/guardian-info?username=${username}`
     : `/guardian?username=${username}`;
 
   const actions = [
