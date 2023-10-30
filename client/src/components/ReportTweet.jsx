@@ -2,7 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import ErrorReport from "./modals/ErrorReport";
-import SuccessReport from "./modals/SuccessReport";
+// import SuccessReport from "./modals/SuccessReport";
 
 export default function ReportTweet() {
   const [tweetLink, setTweetLink] = useState("");
@@ -56,6 +56,7 @@ export default function ReportTweet() {
       setDescription(description);
       setScreenshot(screenshot);
       setShowConfirmation(true);
+      alert("Report created!");
     } catch (error) {
       console.error("Error creating report:", error);
     }
@@ -177,9 +178,9 @@ export default function ReportTweet() {
           Create Report
         </button>
       </div>
-      {showConfirmation && (
+      {/* {showConfirmation && (
         <SuccessReport onClose={() => setShowConfirmation(false)} />
-      )}
+      )} */}
     </form>
   );
 }

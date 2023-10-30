@@ -97,7 +97,7 @@ export default function ReportHistory() {
                   className="px-3 py-4 text-sm text-gray-500 verdict-cell"
                   onClick={() => openModal(report.reviewStatus[0].reasoning)}
                 >
-                  {report.reviewStatus[0].verdict}
+                  {report.reviewStatus[0]?.verdict || "In review"}
                 </td>
               </tr>
             ))}
