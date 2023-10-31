@@ -1,16 +1,12 @@
 import puppeteer from "puppeteer";
 import Sentiment from "sentiment";
 
-
 async function isValidTweetUrl(tweetUrl) {
-  // Regular expression pattern to match a Twitter tweet URL
   const tweetUrlPattern = /^https:\/\/twitter\.com\/\w+\/status\/\d+$/;
   return tweetUrlPattern.test(tweetUrl);
 }
 
 async function analyzeTweetContent(tweetUrl) {
-
-  // Check if the provided URL is a valid Twitter tweet URL
   if (!isValidTweetUrl(tweetUrl)) {
     console.error("Invalid tweet URL:", tweetUrl);
     return null;
@@ -31,16 +27,18 @@ async function analyzeTweetContent(tweetUrl) {
     // Analyze the tweet content for sentiment
     const analysis = sentiment.analyze(tweetContent);
 
-
     //--------------------------------------------------------------------
-    
+
     const overallSentiment = analysis.score > 0 ? "Positive" : "Negative"; //Check back the logic
 
     // Determine the tweet category
     let tweetCategory = "Green";
-    if (analysis.score < 0) {
-      tweetCategory = "Red";
-    }
+    tweetCategory =
+      analysis.score < 0
+        ? "Red"
+        : analysis.score > 0 && analysis.score <= 5
+        ? "Yellow"
+        : "Green";
 
     // Calculate the percentage of negative words
     const words = tweetContent.split(/\s+/);
