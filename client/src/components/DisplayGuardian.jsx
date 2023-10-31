@@ -39,12 +39,13 @@ const DisplayGuardian = () => {
           name: editedGuardian.name,
           email: editedGuardian.email,
           phone: editedGuardian.phone,
+          relationship: editedGuardian.relationship,
         })
         .then((response) => {
           console.log("Guardian updated:", response.data);
 
           setEditedGuardian(null);
-          navigate(`/testing?username=${user}`);
+          navigate(`/guardian-info?username=${user}`);
         })
         .catch((error) => {
           console.error("Error updating guardian:", error);
@@ -120,6 +121,24 @@ const DisplayGuardian = () => {
                             />
                           </div>
                         </div>
+                        <div className="flex items-start mt-2">
+                          <div className="w-1/4">
+                            <h2 className="text-gray-600">Relationship:</h2>
+                          </div>
+                          <div className="w-3/4">
+                            <input
+                              type="text"
+                              value={editedGuardian.relationship}
+                              onChange={(e) =>
+                                setEditedGuardian({
+                                  ...editedGuardian,
+                                  relationship: e.target.value,
+                                })
+                              }
+                              className="border-b border-gray-900/10 pb-2"
+                            />
+                          </div>
+                        </div>
                       </div>
                       <div className="mt-8 flex flex-col justify-center items-center mb-2">
                         <button
@@ -150,9 +169,18 @@ const DisplayGuardian = () => {
                       Guardian Info
                     </h1>
                     <div className="border-b border-gray-900/10 pb-8">
-                      <h1>Name: {guardianData.name}</h1>
-                      <h2>Email: {guardianData.email}</h2>
-                      <h3>Phone: {guardianData.phone}</h3>
+                      <h1>
+                        <b>Name:</b> {guardianData.name}
+                      </h1>
+                      <h2>
+                        <b>Email: </b> {guardianData.email}
+                      </h2>
+                      <h3>
+                        <b>Phone: </b> {guardianData.phone}
+                      </h3>
+                      <h3>
+                        <b>Relationship: </b> {guardianData.relationship}
+                      </h3>
                       <div className="flex flex-col justify-center items-center mt-8 mb-2">
                         <button
                           onClick={() => handleEdit(guardianData._id)}
