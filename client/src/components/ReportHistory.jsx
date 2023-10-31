@@ -62,6 +62,12 @@ export default function ReportHistory() {
               >
                 Status
               </th>
+              <th
+                scope="col"
+                className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+              >
+                Created At
+              </th>
             </tr>
           </thead>
 
@@ -98,6 +104,9 @@ export default function ReportHistory() {
                   onClick={() => openModal(report.reviewStatus[0].reasoning)}
                 >
                   {report.reviewStatus[0]?.verdict || "In review"}
+                </td>
+                <td className="px-3 py-4 text-sm text-gray-500">
+                {new Date(report.createdAt).toLocaleString()}
                 </td>
               </tr>
             ))}
