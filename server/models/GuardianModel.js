@@ -21,15 +21,18 @@ const GuardianSchema = mongoose.Schema({
     required: true,
     validate: {
       validator: function (v) {
-        // Use a regular expression to validate phone number format (e.g., 123-456-7890)
         return /\d{3}-\d{3}-\d{4}/.test(v);
       },
       message: "Phone number must be in the format XXX-XXX-XXXX",
     },
   },
+  relationship: {
+    type: String,
+    required: true,
+  },
   user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "users", // Reference to the 'User' model
+    ref: "users", 
     required: true,
   },
 });

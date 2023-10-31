@@ -17,7 +17,7 @@ router.post("/create/:username", async (req, res) => {
       });
     }
 
-    const { name, email, phone } = req.body;
+    const { name, email, phone, relationship } = req.body;
     const username = req.params.username;
     const user = await UserModel.findOne({ username });
 
@@ -25,14 +25,11 @@ router.post("/create/:username", async (req, res) => {
       name,
       email,
       phone,
+      relationship,
       user: user._id,
     });
 
     await newGuardian.save();
-
-    // const newGuardian = new GuardianModel(req.body);
-    // const savedGuardian = await newGuardian.save();
-    // res.status(201).json({ message: "Guardian created successfully", guardian: savedGuardian });
 
     res.status(201).json({ message: "Guardian added successfully" });
   } catch (error) {
