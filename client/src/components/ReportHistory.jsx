@@ -6,9 +6,19 @@ export default function ReportHistory() {
   const [reports, setReports] = useState([]);
   const [selectedReasoning, setSelectedReasoning] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  // const [viewScreenshot, setViewScreenshot] = useState(false);
 
   const search = useLocation().search;
   const user = new URLSearchParams(search).get("username");
+
+  const [viewedScreenshots, setViewedScreenshots] = useState({});
+
+  const handleViewScreenshot = (reportId) => {
+    setViewedScreenshots((prevState) => ({
+      ...prevState,
+      [reportId]: !prevState[reportId],
+    }));
+  };
 
   const openModal = (reasoning) => {
     setSelectedReasoning(reasoning);
@@ -90,14 +100,30 @@ export default function ReportHistory() {
                 <td className="px-3 py-4 text-sm text-gray-500">
                   {report.description}
                 </td>
-                <td className="px-3 py-4 text-sm text-gray-500">
-                  <a
-                    href={report.screenshot}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    View
-                  </a>
+                <td className="flex justify-center align-center px-3 py-4 text-sm text-gray-500">
+                  {!viewedScreenshots[report._id] ? (
+                    <button
+                      onClick={() => handleViewScreenshot(report._id)}
+                      className="text-indigo-600 hover:underline"
+                    >
+                      View
+                    </button>
+                  ) : (
+                    <div>
+                      <img
+                        src={report.screenshot}
+                        alt="Screenshot"
+                        width="200"
+                        height="auto"
+                      />
+                      <button
+                        onClick={() => handleViewScreenshot(report._id)}
+                        className="text-indigo-600 hover:underline"
+                      >
+                        Minimize
+                      </button>
+                    </div>
+                  )}
                 </td>
                 <td
                   className="px-3 py-4 text-sm text-gray-500 verdict-cell"
@@ -106,7 +132,7 @@ export default function ReportHistory() {
                   {report.reviewStatus[0]?.verdict || "In review"}
                 </td>
                 <td className="px-3 py-4 text-sm text-gray-500">
-                {new Date(report.createdAt).toLocaleString()}
+                  {new Date(report.createdAt).toLocaleString()}
                 </td>
               </tr>
             ))}
