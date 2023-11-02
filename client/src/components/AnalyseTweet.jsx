@@ -15,6 +15,7 @@ export default function AnalyseTweet() {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
+  // const [resultSaved, setResultSaved] = useState(false);
   const [analysisResult, setAnalysisResult] = useState(null);
   const [error, setError] = useState(null);
   const [tweetError, setTweetError] = useState(null);
@@ -49,10 +50,13 @@ export default function AnalyseTweet() {
 
       setTweetError(null);
 
-      const response = await axios.post(`http://localhost:3001/tweet/analyse/${user}`, {
-        tweetUrl: tweetContent,
-        user
-      });
+      const response = await axios.post(
+        `http://localhost:3001/tweet/analyse/${user}`,
+        {
+          tweetUrl: tweetContent,
+          user,
+        }
+      );
       const { analysisResult } = response.data;
 
       setAnalysisResult(analysisResult);
@@ -133,7 +137,7 @@ export default function AnalyseTweet() {
       await axios.post(`http://localhost:3001/saveTweet/${user}`, {
         tweetContent: tweetContent,
         analysisResult: analysisResult,
-        user
+        user,
       });
 
       alert("Tweet saved!");
@@ -255,7 +259,6 @@ export default function AnalyseTweet() {
                       <p className="text-base font-medium text-gray-700">
                         Score: {analysisResult.score}
                       </p>
-                      {/* <p className="text-base font-medium text-gray-700">Comparative: {analysisResult.comparative}</p> */}
                       <p className="text-base font-medium text-gray-700">
                         Overall Sentiment: {analysisResult.overallSentiment}
                       </p>
@@ -282,13 +285,19 @@ export default function AnalyseTweet() {
                           </ul>
                         </div>
                       )}
-                      <button
-                        type="button"
-                        onClick={handleSaveTweet}
-                        className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                      >
-                        Save Result
-                      </button>
+                      {analysisResult.tweetCategory === "Yellow" ||
+                        (analysisResult.tweetCategory === "Red" && (
+                          <button
+                            type="button"
+                            onClick={handleSaveTweet}
+                            className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                          >
+                            Save Result
+                          </button>
+                        ))}
+                      {/* {analysisResult.tweetCategory === "Red" &&
+                        !resultSaved &&
+                        handleSaveTweet} */}
                     </div>
                   )}
                   {error && <p>{error}</p>}
