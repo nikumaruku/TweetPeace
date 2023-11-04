@@ -124,6 +124,11 @@ function TweetCard({ savedTweet }) {
               >
                 Inform guardian
               </button>
+              <button
+                className="mt-3 rounded-md bg-red-50 px-3.5 py-2.5 text-sm font-semibold text-red-600 shadow-sm hover:bg-indigo-100"
+              >
+                Delete
+              </button>
             </div>
 
             {/* Feedback pop-up */}
