@@ -7,17 +7,9 @@ import ContactGuardian from "./ContactGuardian";
 
 export default function TweetCollection() {
   const [savedTweets, setSavedTweets] = useState([]);
-  // const { username } = useParams();
+  
   const search = useLocation().search;
   const username = new URLSearchParams(search).get("username");
-
-  // useEffect(() => {
-  //   axios
-  //     .get(`http://localhost:3001/saveTweet?username=${username}`)
-  //     .then((response) => {
-  //       setSavedTweets(response.data);
-  //     });
-  // }, [username]);
 
   useEffect(() => {
     axios
@@ -27,29 +19,48 @@ export default function TweetCollection() {
       });
   }, [username]);
 
+  const onDelete = (deletedTweetId) => {
+    setSavedTweets((tweets) => tweets.filter((tweet) => tweet._id !== deletedTweetId));
+  };
+
   return (
     <ul role="list" className="divide-y divide-gray-200">
       {savedTweets.map((savedTweet) => (
-        <TweetCard key={savedTweet._id} savedTweet={savedTweet} />
+        <TweetCard key={savedTweet._id} savedTweet={savedTweet} onDelete={onDelete} />
       ))}
     </ul>
   );
 }
 
-function TweetCard({ savedTweet }) {
-  const [expanded, setExpanded] = useState(false);
+function TweetCard({ savedTweet, onDelete }) {
+  const search = useLocation().search;
+  const username = new URLSearchParams(search).get("username");
 
+  const [expanded, setExpanded] = useState(false);
   const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
   const [isContactOpen, setIsContactOpen] = useState(false);
   const [selectedTweetId, setSelectedTweetId] = useState(null);
+
 
   function extractUser(tweetContent) {
     const twitterUrlRegex = /https:\/\/twitter.com\/([^/]+)\//;
     const match = tweetContent.match(twitterUrlRegex);
     return match ? match[1] : "Unknown";
   }
+
   const toggleExpanded = () => {
     setExpanded(!expanded);
+  };
+
+  const handleDelete = async () => {
+    try {
+      await axios.delete(
+        `http://localhost:3001/saveTweet/${username}/${savedTweet._id}`
+      );
+      onDelete(savedTweet._id);
+    } catch (error) {
+      console.error("Error deleting tweet:", error);
+    }
   };
 
   return (
@@ -125,6 +136,7 @@ function TweetCard({ savedTweet }) {
                 Inform guardian
               </button>
               <button
+                onClick={() => handleDelete()}
                 className="mt-3 rounded-md bg-red-50 px-3.5 py-2.5 text-sm font-semibold text-red-600 shadow-sm hover:bg-indigo-100"
               >
                 Delete
