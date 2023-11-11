@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useState } from "react";
 import { ArrowLeftCircleIcon } from "@heroicons/react/24/solid";
 
 const AuthForm = ({
@@ -13,6 +14,24 @@ const AuthForm = ({
   label,
   onSubmit,
 }) => {
+  const [emailError, setEmailError] = useState("");
+
+  const validateEmail = () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!email.trim()) {
+      setEmailError("Email is required");
+    } else if (!emailRegex.test(email)) {
+      setEmailError("Invalid email format");
+    } else {
+      setEmailError("");
+    }
+  };
+
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+    validateEmail();
+  };
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -134,7 +153,7 @@ const AuthForm = ({
                     </div>
                   </div>
 
-                  <div>
+                  {/* <div>
                     <label
                       htmlFor="email"
                       className="block text-sm font-medium leading-6 text-gray-900"
@@ -150,6 +169,31 @@ const AuthForm = ({
                         required
                         className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                       />
+                    </div>
+                  </div> */}
+                  <div>
+                    <label
+                      htmlFor="email"
+                      className="block text-sm font-medium leading-6 text-gray-900"
+                    >
+                      Email address
+                    </label>
+                    <div className="mt-2">
+                      <input
+                        type="email"
+                        id="email"
+                        value={email}
+                        onChange={handleEmailChange}
+                        required
+                        className={`block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 ${
+                          emailError && "border-red-500"
+                        }`}
+                      />
+                      {emailError && (
+                        <p className="mt-2 text-sm text-red-500">
+                          {emailError}
+                        </p>
+                      )}
                     </div>
                   </div>
 
