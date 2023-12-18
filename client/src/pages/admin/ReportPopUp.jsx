@@ -1,12 +1,16 @@
 import { useState } from "react";
 import axios from "axios";
 
-export default function ReportPopUp({ setIsReviewOpen, reportId }) {
+export default function ReportPopUp({
+  setIsReviewOpen,
+  reportId,
+  setReviewedReports,
+}) {
   const [verdict, setVerdict] = useState("");
   const [reasoning, setReasoning] = useState("");
-
-  const [rejectedClicked, setRejectedClicked] = useState(false);
-  const [approvedClicked, setApprovedClicked] = useState(false);
+  const [isReviewed, setIsReviewed] = useState(false);
+  const [rejectedClicked, setRejectedClicked] = useState("");
+  const [approvedClicked, setApprovedClicked] = useState("");
 
   const handleReview = async () => {
     try {
@@ -23,10 +27,14 @@ export default function ReportPopUp({ setIsReviewOpen, reportId }) {
       if (response.status === 200) {
         setIsReviewOpen(false);
         alert("Verdict submitted!");
+        setIsReviewed(true);
+        setReviewedReports((prev) => ({
+          ...prev,
+          [reportId]: true,
+        }));
       } else {
         console.error("Error submitting review");
       }
-      
     } catch (error) {
       console.error("Error submitting review:", error);
     }
