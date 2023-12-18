@@ -6,7 +6,6 @@ export default function ReportHistory() {
   const [reports, setReports] = useState([]);
   const [selectedReasoning, setSelectedReasoning] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  // const [viewScreenshot, setViewScreenshot] = useState(false);
 
   const search = useLocation().search;
   const user = new URLSearchParams(search).get("username");
