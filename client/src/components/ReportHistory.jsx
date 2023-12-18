@@ -30,6 +30,15 @@ export default function ReportHistory() {
     setIsModalOpen(false);
   };
 
+  const calculateRemainingTime = (createdAt) => {
+    const expirationTime = new Date(createdAt);
+    expirationTime.setMinutes(expirationTime.getMinutes() + 5); // Add 5 minutes to createdAt for expiration
+    const currentTime = new Date();
+    const remainingTime = expirationTime.getTime() - currentTime.getTime();
+
+    return Math.max(0, Math.floor(remainingTime / 1000)); // Return remaining time in seconds
+  };
+
   useEffect(() => {
     axios.get(`http://localhost:3001/report/${user}`).then((response) => {
       setReports(response.data);
@@ -78,6 +87,12 @@ export default function ReportHistory() {
               >
                 Created At
               </th>
+              {/* <th
+                scope="col"
+                className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+              >
+                Countdown
+              </th> */}
             </tr>
           </thead>
 
@@ -134,6 +149,7 @@ export default function ReportHistory() {
                 <td className="px-3 py-4 text-sm text-gray-500">
                   {new Date(report.createdAt).toLocaleString()}
                 </td>
+
               </tr>
             ))}
           </tbody>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 import ErrorTweet from "./modals/ErrorTweet";
@@ -28,6 +28,12 @@ export default function AnalyseTweet() {
   const search = useLocation().search;
   const user = new URLSearchParams(search).get("username");
 
+  useEffect(() => {
+    if (analysisResult && analysisResult.tweetCategory === "Red") {
+      handleSaveTweet();
+    }
+  }, [analysisResult]);
+  
   const isValidTwitterUrl = (url) => {
     const twitterUrlPattern =
       /^(https?:\/\/)?twitter\.com\/[a-zA-Z0-9_]+\/status\/[0-9]+\/?$/;
@@ -285,7 +291,18 @@ export default function AnalyseTweet() {
                           </ul>
                         </div>
                       )}
-                      {analysisResult.tweetCategory === "Yellow" ||
+                      {/* {analysisResult.tweetCategory === "Red" && handleSaveTweet()} */}
+                      {analysisResult.tweetCategory === "Yellow" && (
+                        <button
+                          type="button"
+                          onClick={handleSaveTweet}
+                          className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                        >
+                          Save Result
+                        </button>
+                      )}
+
+                      {/* {analysisResult.tweetCategory === "Yellow" ||
                         (analysisResult.tweetCategory === "Red" && (
                           <button
                             type="button"
@@ -294,7 +311,7 @@ export default function AnalyseTweet() {
                           >
                             Save Result
                           </button>
-                        ))}
+                        ))} */}
                       {/* {analysisResult.tweetCategory === "Red" &&
                         !resultSaved &&
                         handleSaveTweet} */}
