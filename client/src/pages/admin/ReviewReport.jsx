@@ -4,6 +4,7 @@ import ReportPopUp from "./ReportPopUp";
 
 export default function ReviewReport() {
   const [savedReports, setSavedReports] = useState([]);
+  const [reviewedReports, setReviewedReports] = useState({});
 
   useEffect(() => {
     axios.get(`http://localhost:3001/report`).then((response) => {
@@ -14,13 +15,18 @@ export default function ReviewReport() {
   return (
     <ul className="divide-y divide-gray-200">
       {savedReports.map((savedReport) => (
-        <ReportCard key={savedReport._id} savedReport={savedReport} />
+        <ReportCard
+          key={savedReport._id}
+          savedReport={savedReport}
+          isReviewed={reviewedReports[savedReport._id]}
+          setReviewedReports={setReviewedReports}
+        />
       ))}
     </ul>
   );
 }
 
-function ReportCard({ savedReport }) {
+function ReportCard({ savedReport, isReviewed, setReviewedReports }) {
   const [expanded, setExpanded] = useState(false);
   const [isReviewOpen, setIsReviewOpen] = useState(false);
   const [selectedReportId, setSelectedReportId] = useState(null);
@@ -79,12 +85,21 @@ function ReportCard({ savedReport }) {
               <div className="space-x-3">
                 <button
                   onClick={() => {
-                    setIsReviewOpen(true);
-                    setSelectedReportId(savedReport._id);
+                    if (!savedReport.reviewStatus[0]?.verdict) {
+                      setIsReviewOpen(true);
+                      setSelectedReportId(savedReport._id);
+                    }
                   }}
-                  className="mt-3 rounded-md bg-indigo-50 px-3.5 py-2.5 text-sm font-semibold text-indigo-600 shadow-sm hover:bg-indigo-100"
+                  className={`${
+                    !savedReport.reviewStatus[0]?.verdict
+                      ? "mt-3 rounded-md px-3.5 py-2.5 text-sm font-semibold shadow-sm hover:bg-indigo-100 bg-indigo-500 text-white"
+                      : savedReport.reviewStatus[0]?.verdict === "Approved"
+                      ? "mt-3 rounded-md px-3.5 py-2.5 text-sm font-semibold shadow-sm bg-green-500 text-white"
+                      : "mt-3 rounded-md px-3.5 py-2.5 text-sm font-semibold shadow-sm bg-red-500 text-white"
+                  }`}
+                  disabled={isReviewed}
                 >
-                  Review report
+                  {savedReport.reviewStatus[0]?.verdict || "Review report"}
                 </button>
               </div>
 
@@ -92,6 +107,7 @@ function ReportCard({ savedReport }) {
                 <ReportPopUp
                   setIsReviewOpen={setIsReviewOpen}
                   reportId={selectedReportId}
+                  setReviewedReports={setReviewedReports}
                 />
               )}
             </div>
@@ -101,4 +117,3 @@ function ReportCard({ savedReport }) {
     </>
   );
 }
-
