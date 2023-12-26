@@ -29,14 +29,14 @@ export default function ReportHistory() {
     setIsModalOpen(false);
   };
 
-  const calculateRemainingTime = (createdAt) => {
-    const expirationTime = new Date(createdAt);
-    expirationTime.setMinutes(expirationTime.getMinutes() + 5); // Add 5 minutes to createdAt for expiration
-    const currentTime = new Date();
-    const remainingTime = expirationTime.getTime() - currentTime.getTime();
+  // const calculateRemainingTime = (createdAt) => {
+  //   const expirationTime = new Date(createdAt);
+  //   expirationTime.setMinutes(expirationTime.getMinutes() + 5); // Add 5 minutes to createdAt for expiration
+  //   const currentTime = new Date();
+  //   const remainingTime = expirationTime.getTime() - currentTime.getTime();
 
-    return Math.max(0, Math.floor(remainingTime / 1000)); // Return remaining time in seconds
-  };
+  //   return Math.max(0, Math.floor(remainingTime / 1000)); // Return remaining time in seconds
+  // };
 
   useEffect(() => {
     axios.get(`http://localhost:3001/report/${user}`).then((response) => {
@@ -146,9 +146,6 @@ export default function ReportHistory() {
                             </svg>
                           </button>
                         </div>
-                        <h2 className="text-lg font-semibold mb-4">
-                          Screenshot
-                        </h2>
                         <div className="mb-4 flex justify-center items-center">
                           <img
                             src={report.screenshot}

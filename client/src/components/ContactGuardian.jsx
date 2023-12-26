@@ -81,31 +81,17 @@ const ContactGuardian = ({ setIsContactOpen, savedTweet }) => {
                       onClick={() =>
                         sendEmailToGuardian(guardian.email, savedTweet)
                       }
-                      className="mt-3 rounded-md bg-indigo-50 px-3.5 py-2.5 text-sm font-semibold text-indigo-600 shadow-sm hover:bg-indigo-100"
+                      className="mt-3 mr-5 rounded-md bg-indigo-50 px-3.5 py-2.5 text-sm font-semibold text-indigo-600 shadow-sm hover:bg-indigo-100"
                     >
                       Email tweet
                     </button>
-                  </li>
-                  <button
-                    onClick={() => setIsContactOpen(false)}
-                    className="text-gray-500 hover:text-gray-700 focus:outline-none"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-6 w-6"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
+                    <button
+                      onClick={() => setIsContactOpen(false)}
+                      className="text-gray-500 hover:text-gray-700 focus:outline-none"
                     >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M6 18L18 6M6 6l12 12"
-                      />
-                    </svg>
-                  </button>
-                  <div></div>
+                      Minimise
+                    </button>
+                  </li>
                 </div>
               </>
             ))}
