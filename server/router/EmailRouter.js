@@ -3,31 +3,25 @@ import nodemailer from "nodemailer";
 
 const router = express.Router();
 
-let testAccount = await nodemailer.createTestAccount();
-
 let transporter = nodemailer.createTransport({
-  host: "smtp.ethereal.email",
+  service: "gmail",
+  host: "smtp.gmail.com",
   port: 587,
   secure: false,
   auth: {
-    user: testAccount.user,
-    pass: testAccount.pass,
+    user: "fundality2109@gmail.com",
+    pass: "xqkhxkacqesfnjcf",
   },
 });
-
-// let transporter = nodemailer.createTransport({
-//   service: "Gmail",
-//   auth: {
-//     user: "fundality2109@gmail.com",
-//     pass: "XXXXX",
-//   },
-// });
 
 router.post("/send-email", async (req, res) => {
   const { recipientEmail, subject, message } = req.body;
 
   const mailOptions = {
-    from: "alert@tweetpeace.com",
+    from: {
+      name: "TweetPeace",
+      address: "fundality2109@gmail.com",
+    },
     to: recipientEmail,
     subject: subject,
     text: message,
