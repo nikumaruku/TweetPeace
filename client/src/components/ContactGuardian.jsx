@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 const ContactGuardian = ({ setIsContactOpen, savedTweet }) => {
   const [guardians, setGuardians] = useState([]);
@@ -26,11 +26,10 @@ const ContactGuardian = ({ setIsContactOpen, savedTweet }) => {
   };
 
   const sendEmailToGuardian = async (guardianEmail, savedTweet) => {
-    const subject = "Regarding Saved Tweet";
+    const subject = `Tweet Alert by ${user}!`;
     const { tweetContent, analysisResult, savedAt } = savedTweet;
 
     const message = `
-    Here is the saved tweet content:
     Tweet Link: ${tweetContent}
     Score: ${analysisResult.score}
     Overall Sentiment: ${analysisResult.overallSentiment}
@@ -49,7 +48,7 @@ const ContactGuardian = ({ setIsContactOpen, savedTweet }) => {
         }
       );
 
-      alert(`Email sent successfully. Link: ${response.data.preview}!`);
+      alert(`Email sent successfully!`);
       console.log(response.data.preview);
     } catch (error) {
       console.error("Error sending email:", error);
