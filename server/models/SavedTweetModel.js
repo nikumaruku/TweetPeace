@@ -5,9 +5,13 @@ const SavedTweetSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  isiTweet: {
+    type: String,
+  },
   analysisResult: {
     score: Number,
     overallSentiment: String,
+    isiTweet: String,
     tweetCategory: String,
     negativeWordCount: Number,
     badWords: [

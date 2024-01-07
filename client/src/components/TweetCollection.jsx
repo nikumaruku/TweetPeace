@@ -1,13 +1,16 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+// import _orderBy from "lodash/orderBy";
 
 import FeedbackForm from "./FeedbackForm";
 import ContactGuardian from "./ContactGuardian";
 
 export default function TweetCollection() {
   const [savedTweets, setSavedTweets] = useState([]);
-  
+  const [sortOption, setSortOption] = useState("date");
+  const [displayedTweets, setDisplayedTweets] = useState([]); // Separate state for displayed tweets
+
   const search = useLocation().search;
   const username = new URLSearchParams(search).get("username");
 
@@ -20,15 +23,68 @@ export default function TweetCollection() {
   }, [username]);
 
   const onDelete = (deletedTweetId) => {
-    setSavedTweets((tweets) => tweets.filter((tweet) => tweet._id !== deletedTweetId));
+    setSavedTweets((tweets) =>
+      tweets.filter((tweet) => tweet._id !== deletedTweetId)
+    );
+  };
+
+  // const compareFunction = (a, b) => {
+  //   const dateA = new Date(a.createdAt);
+  //   const dateB = new Date(b.createdAt);
+  //   if (sortOption === "date") {
+  //     return dateA - dateB; // Sort by date
+  //   } else {
+  //     // Sort alphabetically by a field (e.g., savedTweet)
+  //     return a.savedTweet.localeCompare(b.savedTweet);
+  //   }
+  // };
+
+  // const handleSort = () => {
+  //   const sortedTweets = [...savedTweets].sort(compareFunction);
+  //   setSavedTweets(sortedTweets);
+  //   setSortOption(sortOption === "date" ? "alphabet" : "date");
+  // };
+
+  const handleSort = () => {
+    if (sortOption === "date") {
+      const sortedTweets = [...displayedTweets].sort((a, b) => {
+        const dateA = new Date(a.savedAt.$date);
+        const dateB = new Date(b.savedAt.$date);
+        return dateA > dateB ? -1 : 1; // Sort in descending order
+      });
+      setDisplayedTweets(sortedTweets);
+      setSortOption("alphabet");
+    } else {
+      const filterDate = new Date(Math.max(...savedTweets.map((tweet) => new Date(tweet.savedAt.$date))));
+      const filteredTweets = savedTweets.filter((tweet) => {
+        const tweetCreatedAt = new Date(tweet.savedAt.$date);
+        return tweetCreatedAt.getTime() === filterDate.getTime();
+      });
+      setDisplayedTweets(filteredTweets);
+      setSortOption("date");
+    }
   };
 
   return (
-    <ul role="list" className="divide-y divide-gray-200">
-      {savedTweets.map((savedTweet) => (
-        <TweetCard key={savedTweet._id} savedTweet={savedTweet} onDelete={onDelete} />
-      ))}
-    </ul>
+    <div>
+      <ul role="list" className="divide-y divide-gray-200">
+        <div className="flex">
+          <button
+            className="mb-3 rounded-md bg-gray-50 px-3.5 py-1.5 text-sm font-semibold text-black-600 shadow-sm hover:bg-indigo-100"
+            onClick={() => handleSort()}
+          >
+            {sortOption === "date" ? "Sort by Latest Creation Date" : "Sort by Alphabet"}
+          </button>
+        </div>
+        {savedTweets.map((savedTweet) => (
+          <TweetCard
+            key={savedTweet._id}
+            savedTweet={savedTweet}
+            onDelete={onDelete}
+          />
+        ))}
+      </ul>
+    </div>
   );
 }
 
@@ -41,7 +97,6 @@ function TweetCard({ savedTweet, onDelete }) {
   const [isContactOpen, setIsContactOpen] = useState(false);
   const [selectedTweetId, setSelectedTweetId] = useState(null);
 
-
   function extractUser(tweetContent) {
     const twitterUrlRegex = /https:\/\/twitter.com\/([^/]+)\//;
     const match = tweetContent.match(twitterUrlRegex);
@@ -52,11 +107,13 @@ function TweetCard({ savedTweet, onDelete }) {
     setExpanded(!expanded);
   };
 
+  //Check back delete function
   const handleDelete = async () => {
     try {
       await axios.delete(
         `http://localhost:3001/saveTweet/${username}/${savedTweet._id}`
       );
+      console.log(`${username}`);
       onDelete(savedTweet._id);
     } catch (error) {
       console.error("Error deleting tweet:", error);
@@ -72,7 +129,12 @@ function TweetCard({ savedTweet, onDelete }) {
               Tweet by {extractUser(savedTweet.tweetContent)}
             </h3>
             <p className="mt-2 text-sm text-gray-700">
-              <strong></strong> {savedTweet.tweetContent}
+              <div>
+                {savedTweet.tweetContent}
+                <div className="flex border-2 my-2 bg-gray-50 text-gray-600 p-5 rounded-lg">
+                  "{savedTweet.analysisResult.isiTweet}"
+                </div>
+              </div>
             </p>
           </div>
           <div className="col-span-1 flex items-center justify-end">
