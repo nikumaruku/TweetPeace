@@ -8,15 +8,11 @@ const sentiment = new Sentiment();
 
 router.post("/analyse", async (req, res) => {
   try {
-    const { tweetUser } = req.body;
+    const { tweetContents } = req.body;
 
-    const threadData = await TwitterThreadModel.findOne({ tweetUser });
-
-    if (!threadData) {
-      return res.status(404).json({ message: "Thread data not found for the user." });
+    if (!Array.isArray(tweetContents)) {
+      return res.status(400).json({ message: "Invalid tweet contents" });
     }
-
-    const tweetContents = threadData.tweets;
 
     const tweetSentiments = tweetContents.map((tweet) => {
       const analysis = sentiment.analyze(tweet);
@@ -26,33 +22,35 @@ router.post("/analyse", async (req, res) => {
     res.status(200).json({ tweetSentiments });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "An error occurred while obtaining thread content" });
+    res.status(500).json({ message: "An error occurred while analyzing tweet contents" });
   }
 });
 
 router.post("/obtain", async (req, res) => {
   try {
-    const { tweetUser, threadUrls } = req.body;
+    const {  threadUrls } = req.body;
 
     const threadIds = [];
+    let username = "";
 
     for (const url of threadUrls) {
       const parts = url.split("/");
       const threadId = parts[5];
       threadIds.push(threadId);
+      username = parts[3];
     }
 
     const tweetContents = await fetchThreadContent(threadUrls);
 
     const twitterThread = new TwitterThreadModel({
-      username: tweetUser,
+      username,
       threadId: threadIds,
       tweets: tweetContents,
     });
 
     await twitterThread.save();
 
-    res.status(200).json({ tweetContents });
+    res.status(200).json({ tweetContents, username });
   } catch (error) {
     console.error(error);
     res
