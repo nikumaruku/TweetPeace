@@ -10,6 +10,11 @@ export default function ReportTweet() {
   const [description, setDescription] = useState("");
   const [screenshot, setScreenshot] = useState("");
   const [reportError, setReportError] = useState(null);
+  const [reportResult, setReportResult] = useState(null);
+  const [reportDatas, setReportDatas] = useState("");
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [displayDetails, setDisplayDetails] = useState(false);
+  const [hasCreateReport, setHasCreateReport] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
 
   const search = useLocation().search;
@@ -56,10 +61,37 @@ export default function ReportTweet() {
       setDescription(description);
       setScreenshot(screenshot);
       setShowConfirmation(true);
+      setReportDatas(reportData);
+
+      setIsPopupOpen(true);
       alert("Report created!");
     } catch (error) {
       console.error("Error creating report:", error);
     }
+  };
+
+  const analyseReport = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post(
+        `http://localhost:3001/report/analysess`,
+        { tweetLink }
+      );
+
+      setReportResult(response.data);
+      console.log(response.data);
+      setDisplayDetails(true);
+    } catch (error) {
+      console.error("Error creating report:", error);
+    }
+  };
+
+  const handleDetails = async () => {
+    displayDetails(false);
+  };
+
+  const handleReject = () => {
+    setIsPopupOpen(false);
   };
 
   const handleFileInputChange = (e) => {
@@ -108,9 +140,11 @@ export default function ReportTweet() {
             value={incidentType}
             onChange={(e) => setIncidentType(e.target.value)}
           >
-            <option value="Doxx">Doxx</option>
-            <option value="Threathen">Threathen</option>
-            <option value="Mencarut">Mencarut</option>
+            <option value="Doxx">Harassment</option>
+            <option value="Threathen">Troll</option>
+            <option value="Mencarut">Flaming</option>
+            <option value="Mencarut">Masquerading</option>
+            <option value="Mencarut">Doxing</option>
           </select>
         </div>
 
@@ -178,9 +212,68 @@ export default function ReportTweet() {
           Create Report
         </button>
       </div>
-      {/* {showConfirmation && (
-        <SuccessReport onClose={() => setShowConfirmation(false)} />
-      )} */}
+
+      {/* Suggestion Popup */}
+      {isPopupOpen && (
+        <div className="fixed ml-[25%] rounded-lg w-[50%] inset-0 flex items-center justify-center z-10">
+          <div className="bg-white p-4 rounded shadow-lg space-y-4">
+            <>
+              <p>
+                <b>Like to know more about your report? We can help!</b>
+              </p>
+              <div className="flex items-center justify-center">
+                <button
+                  onClick={analyseReport}
+                  type="submit"
+                  className="bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-2 px-4 mr-3 rounded"
+                >
+                  Sure!
+                </button>
+                <button
+                  onClick={() => handleReject()}
+                  className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded"
+                >
+                  Never mind
+                </button>
+              </div>
+            </>
+          </div>
+        </div>
+      )}
+
+      {/* Details Popup */}
+      {displayDetails && reportResult && (
+        <div className="fixed ml-[25%] rounded-lg w-[50%] inset-0 flex items-center justify-center z-10">
+          <div className="bg-white p-4 rounded shadow-lg space-y-4">
+            <>
+              <p>
+                <b>
+                  Your report seems a bit concerning! We would suggest you to
+                  also report to Twitter directly through this link
+                  ((https://help.twitter.com/en/forms/safety-and-sensitive-content/abuse)
+                  /) for more appropriate and direct response!
+                </b>
+              </p>
+              <h2 className="text-xl font-bold underline">Analysis Result</h2>
+              <p className="text-base font-medium text-gray-700">
+                Overall Sentiment: {reportResult.reportAnalysis.overallSentiment}
+              </p>
+              <p className="text-base font-medium text-gray-700">
+                Tweet Category: {reportResult.reportAnalysis.tweetCategory}
+              </p>
+
+              <div className="flex items-center justify-center">
+                <button
+                  onClick={handleDetails}
+                  className="bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-2 px-4 mr-3 rounded"
+                >
+                  Understood
+                </button>
+              </div>
+            </>
+          </div>
+        </div>
+      )}
     </form>
   );
 }
