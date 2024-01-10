@@ -104,8 +104,12 @@ export default function UserContent() {
           </div>
           <div className="mt-8">
             <h3 className="text-base font-semibold leading-6 text-gray-900">
-              <a href={action.href} className="focus:outline-none">
-                {/* Extend touch target to entire panel */}
+              <a
+                href={action.href}
+                rel="noopener noreferrer"
+                target="_blank"
+                className="focus:outline-none"
+              >
                 <span className="absolute inset-0" aria-hidden="true" />
                 {action.title}
               </a>
