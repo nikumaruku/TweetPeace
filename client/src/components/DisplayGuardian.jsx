@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+// import parentsIcon from "../../src//assets/"
 
 const DisplayGuardian = () => {
   const [guardianDatas, setGuardianDatas] = useState([]);
@@ -53,6 +54,7 @@ const DisplayGuardian = () => {
     }
   };
 
+
   return (
     <div>
       {guardianDatas.map((guardianData) => (
@@ -60,16 +62,16 @@ const DisplayGuardian = () => {
           {editedGuardian && editedGuardian._id === guardianData._id ? (
             <div className="flex min-h-full flex-1 flex-col justify-center py-12 sm:px-6 lg:px-8">
               <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-[480px]">
-                <div className="bg-white px-6 py-12 shadow sm:rounded-lg sm:px-12">
+                <div className="bg-white px-6 py-12 shadow-xl sm:rounded-lg sm:px-12">
                   <form>
                     <h1 className="leading-7 text-gray-900 text-4xl font-bold mb-10">
-                      Guardian Info
+                      Guardian Information
                     </h1>
-                    <div className="border-b border-gray-900/10 pb-8">
+                    <div className="border-gray-900/10 pb-8">
                       <div className="mt-2">
                         <div className="flex items-start">
                           <div className="w-1/4">
-                            <h2 className="text-gray-600">Name:</h2>
+                            <h2 className="text-gray-600">Name</h2>
                           </div>
                           <div className="w-3/4">
                             <input
@@ -87,7 +89,7 @@ const DisplayGuardian = () => {
                         </div>
                         <div className="flex items-start mt-2">
                           <div className="w-1/4">
-                            <h2 className="text-gray-600">Email:</h2>
+                            <h2 className="text-gray-600">Email</h2>
                           </div>
                           <div className="w-3/4">
                             <input
@@ -105,7 +107,7 @@ const DisplayGuardian = () => {
                         </div>
                         <div className="flex items-start mt-2">
                           <div className="w-1/4">
-                            <h2 className="text-gray-600">Phone:</h2>
+                            <h2 className="text-gray-600">Phone</h2>
                           </div>
                           <div className="w-3/4">
                             <input
@@ -123,7 +125,7 @@ const DisplayGuardian = () => {
                         </div>
                         <div className="flex items-start mt-2">
                           <div className="w-1/4">
-                            <h2 className="text-gray-600">Relationship:</h2>
+                            <h2 className="text-gray-600">Relationship</h2>
                           </div>
                           <div className="w-3/4">
                             <input
@@ -163,25 +165,35 @@ const DisplayGuardian = () => {
           ) : (
             <div className="flex min-h-full flex-1 flex-col justify-center py-12 sm:px-6 lg:px-8">
               <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-[480px]">
-                <div className="bg-white px-6 py-12 shadow sm:rounded-lg sm:px-12">
-                  <form>
-                    <h1 className="leading-7 text-gray-900 text-4xl font-bold mb-10">
-                      Guardian Info
+                <div className="bg-white border-2 px-6 py-12 shadow-xl sm:rounded-lg sm:px-12">
+                  <form >
+                    <h1 className="flex items-center justify-center leading-7 text-gray-900 text-4xl font-bold mb-10">
+                      Guardian Information
                     </h1>
-                    <div className="border-b border-gray-900/10 pb-8">
-                      <h1>
-                        <b>Name:</b> {guardianData.name}
-                      </h1>
-                      <h2>
-                        <b>Email: </b> {guardianData.email}
-                      </h2>
-                      <h3>
-                        <b>Phone: </b> {guardianData.phone}
-                      </h3>
-                      <h3>
-                        <b>Relationship: </b> {guardianData.relationship}
-                      </h3>
-                      <div className="flex flex-col justify-center items-center mt-8 mb-2">
+                    <img
+                      src="../../src//assets/parents-icon.jpg"
+                      alt="parents icon"
+                    />
+                    <div className="flex flex-col items-center justify-center border-gray-900/10 pb-8">
+                      <div className="flex flex-col justify-center items-center">
+                        <h1>
+                          <b>Name</b>
+                        </h1>
+                        <h2 className="mb-2">{guardianData.name}</h2>
+                        <h1>
+                          <b>Email </b>
+                        </h1>
+                        <h2 className="mb-2">{guardianData.email}</h2>
+                        <h1>
+                          <b>Phone </b>
+                        </h1>
+                        <h2 className="mb-2">{guardianData.phone}</h2>
+                        <h1>
+                          <b>Relationship </b>
+                        </h1>
+                        <h2>{guardianData.relationship}</h2>
+                      </div>
+                      <div className="flex flex-col justify-center items-center mt-4">
                         <button
                           onClick={() => handleEdit(guardianData._id)}
                           className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
