@@ -1,7 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-// import _orderBy from "lodash/orderBy";
 
 import FeedbackForm from "./FeedbackForm";
 import ContactGuardian from "./ContactGuardian";
@@ -14,13 +13,11 @@ export default function TweetCollection() {
   const search = useLocation().search;
   const username = new URLSearchParams(search).get("username");
 
-  useEffect(() => {
-    axios
-      .get(`http://localhost:3001/saveTweet/${username}`)
-      .then((response) => {
-        setSavedTweets(response.data);
-      });
-  }, [username]);
+  function extractUser(tweetContent) {
+    const twitterUrlRegex = /https:\/\/twitter.com\/([^/]+)\//;
+    const match = tweetContent.match(twitterUrlRegex);
+    return match ? match[1] : "Unknown";
+  }
 
   const onDelete = (deletedTweetId) => {
     setSavedTweets((tweets) =>
@@ -28,39 +25,47 @@ export default function TweetCollection() {
     );
   };
 
-  // const compareFunction = (a, b) => {
-  //   const dateA = new Date(a.createdAt);
-  //   const dateB = new Date(b.createdAt);
-  //   if (sortOption === "date") {
-  //     return dateA - dateB; // Sort by date
-  //   } else {
-  //     // Sort alphabetically by a field (e.g., savedTweet)
-  //     return a.savedTweet.localeCompare(b.savedTweet);
-  //   }
-  // };
+  // useEffect(() => {
+  //   axios
+  //     .get(`http://localhost:3001/saveTweet/${username}`)
+  //     .then((response) => {
+  //       setSavedTweets(response.data);
+  //       console.log(response.data);
+  //     });
+  // }, [username]);
 
-  // const handleSort = () => {
-  //   const sortedTweets = [...savedTweets].sort(compareFunction);
-  //   setSavedTweets(sortedTweets);
-  //   setSortOption(sortOption === "date" ? "alphabet" : "date");
-  // };
+  useEffect(() => {
+    axios
+      .get(`http://localhost:3001/saveTweet/${username}`)
+      .then((response) => {
+        const sortedData = response.data.sort((a, b) => {
+          const dateA = new Date(a.savedAt).getTime();
+          const dateB = new Date(b.savedAt).getTime();
+          return dateB - dateA; // Sort in descending order
+        });
+        setSavedTweets(sortedData);
+      })
+      .catch((error) => {
+        console.error("Error fetching tweets:", error);
+      });
+  }, [username]);
 
   const handleSort = () => {
     if (sortOption === "date") {
-      const sortedTweets = [...displayedTweets].sort((a, b) => {
-        const dateA = new Date(a.savedAt.$date);
-        const dateB = new Date(b.savedAt.$date);
-        return dateA > dateB ? -1 : 1; // Sort in descending order
+      const sortedTweets = [...savedTweets].sort((a, b) => {
+        const dateA = new Date(a.savedAt).getTime();
+        const dateB = new Date(b.savedAt).getTime();
+        return dateB - dateA; // Sort in descending order
       });
       setDisplayedTweets(sortedTweets);
       setSortOption("alphabet");
-    } else {
-      const filterDate = new Date(Math.max(...savedTweets.map((tweet) => new Date(tweet.savedAt.$date))));
-      const filteredTweets = savedTweets.filter((tweet) => {
-        const tweetCreatedAt = new Date(tweet.savedAt.$date);
-        return tweetCreatedAt.getTime() === filterDate.getTime();
+    } else if (sortOption === "alphabet") {
+      const sortedTweets = [...savedTweets].sort((a, b) => {
+        const usernameA = extractUser(a.tweetContent).toLowerCase();
+        const usernameB = extractUser(b.tweetContent).toLowerCase();
+        return usernameA.localeCompare(usernameB); // Sort alphabetically by username
       });
-      setDisplayedTweets(filteredTweets);
+      setDisplayedTweets(sortedTweets);
       setSortOption("date");
     }
   };
@@ -73,10 +78,12 @@ export default function TweetCollection() {
             className="mb-3 rounded-md bg-gray-50 px-3.5 py-1.5 text-sm font-semibold text-black-600 shadow-sm hover:bg-indigo-100"
             onClick={() => handleSort()}
           >
-            {sortOption === "date" ? "Sort by Latest Creation Date" : "Sort by Alphabet"}
+            {sortOption === "date"
+              ? "Sort by Latest Creation Date"
+              : "Sort by Alphabet"}
           </button>
         </div>
-        {savedTweets.map((savedTweet) => (
+        {displayedTweets.map((savedTweet) => (
           <TweetCard
             key={savedTweet._id}
             savedTweet={savedTweet}
