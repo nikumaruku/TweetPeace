@@ -1,7 +1,6 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-// import parentsIcon from "../../src//assets/"
 
 const DisplayGuardian = () => {
   const [guardianDatas, setGuardianDatas] = useState([]);
@@ -54,6 +53,9 @@ const DisplayGuardian = () => {
     }
   };
 
+  const handleReturn = () => {
+    window.close();
+  };
 
   return (
     <div>
@@ -165,15 +167,19 @@ const DisplayGuardian = () => {
           ) : (
             <div className="flex min-h-full flex-1 flex-col justify-center py-12 sm:px-6 lg:px-8">
               <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-[480px]">
-                <div className="bg-white border-2 px-6 py-12 shadow-xl sm:rounded-lg sm:px-12">
-                  <form >
+                <div className="bg-white border-2 px-6 pt-12 pb-6 shadow-xl sm:rounded-lg sm:px-12">
+                  <form>
                     <h1 className="flex items-center justify-center leading-7 text-gray-900 text-4xl font-bold mb-10">
                       Guardian Information
                     </h1>
-                    <img
-                      src="../../src//assets/parents-icon.jpg"
-                      alt="parents icon"
-                    />
+                    <div className="flex items-center justify-center">
+                      <img
+                        src="../../src//assets/parents-icon.jpg"
+                        alt="parents icon"
+                        width={250}
+                        height={250}
+                      />
+                    </div>
                     <div className="flex flex-col items-center justify-center border-gray-900/10 pb-8">
                       <div className="flex flex-col justify-center items-center">
                         <h1>
@@ -201,7 +207,10 @@ const DisplayGuardian = () => {
                           Edit
                         </button>
                         <Link to={`/dashboard?username=${user}`}>
-                          <button className="rounded-md bg-gray-300 px-3 py-2 mt-3 text-sm font-semibold text-gray-600 shadow-sm hover:bg-gray-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-400">
+                          <button
+                            onClick={handleReturn}
+                            className="rounded-md bg-gray-300 px-3 py-2 mt-3 text-sm font-semibold text-gray-600 shadow-sm hover:bg-gray-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-400"
+                          >
                             Return to dashboard
                           </button>
                         </Link>

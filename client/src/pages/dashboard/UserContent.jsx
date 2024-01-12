@@ -19,6 +19,49 @@ export default function UserContent() {
 
   const [hasGuardianDetails, setHasGuardianDetails] = useState(false);
 
+  const guardianHref = hasGuardianDetails
+  ? `/guardian-info?username=${username}`
+  : `/guardian?username=${username}`;
+
+const actions = [
+  {
+    title: "Cyberbullying Hotline",
+    href: "https://findahelpline.com/my/topics/bullying",
+    icon: PhoneIcon,
+    description:
+      "Need to talk? Get free, confidential support with Bullying from a real human. Online chat, text and phone helplines. No sign up or personal info required.",
+    iconForeground: "text-red-700",
+    iconBackground: "bg-red-50",
+  },
+  {
+    title: "What is Cyberbully?",
+    href: "https://www.stopbullying.gov/cyberbullying/what-is-it",
+    icon: AcademicCapIcon,
+    description:
+      "Discover tactics, prevention methods and how to deal with cyberbullying",
+    iconForeground: "text-purple-700",
+    iconBackground: "bg-purple-50",
+  },
+  {
+    title: "Guardian Contact Info",
+    href: guardianHref,
+    icon: UsersIcon,
+    description:
+      "Sometimes you need the support of your beloved ones when things get tough. Save information about a guardian or contact person for easy reachability, whenever you need them",
+    iconForeground: "text-sky-700",
+    iconBackground: "bg-sky-50",
+  },
+  {
+    title: "Words of the Day!",
+    href: "https://quotes-react.netlify.app/",
+    icon: LightBulbIcon,
+    description:
+      "Click here to get some light motivation for the day! Stay strong and seek extra help if necessary, remember, no one deserves to suffer",
+    iconForeground: "text-yellow-700",
+    iconBackground: "bg-yellow-50",
+  },
+];
+
   useEffect(() => {
     axios
       .get(`http://localhost:3001/guardians/obtain/${username}`)
@@ -30,49 +73,6 @@ export default function UserContent() {
         console.error("Error checking guardian details:", error);
       });
   }, [username]);
-
-  const guardianHref = hasGuardianDetails
-    ? `/guardian-info?username=${username}`
-    : `/guardian?username=${username}`;
-
-  const actions = [
-    {
-      title: "Cyberbullying Hotline",
-      href: "https://findahelpline.com/my/topics/bullying",
-      icon: PhoneIcon,
-      description:
-        "Need to talk? Get free, confidential support with Bullying from a real human. Online chat, text and phone helplines. No sign up or personal info required.",
-      iconForeground: "text-red-700",
-      iconBackground: "bg-red-50",
-    },
-    {
-      title: "What is Cyberbully?",
-      href: "https://www.stopbullying.gov/cyberbullying/what-is-it",
-      icon: AcademicCapIcon,
-      description:
-        "Discover tactics, prevention methods and how to deal with cyberbullying",
-      iconForeground: "text-purple-700",
-      iconBackground: "bg-purple-50",
-    },
-    {
-      title: "Guardian Contact Info",
-      href: guardianHref,
-      icon: UsersIcon,
-      description:
-        "Sometimes you need the support of your beloved ones when things get tough. Save information about a guardian or contact person for easy reachability, whenever you need them",
-      iconForeground: "text-sky-700",
-      iconBackground: "bg-sky-50",
-    },
-    {
-      title: "Words of the Day!",
-      href: "https://quotes-react.netlify.app/",
-      icon: LightBulbIcon,
-      description:
-        "Click here to get some light motivation for the day! Stay strong and seek extra help if necessary, remember, no one deserves to suffer",
-      iconForeground: "text-yellow-700",
-      iconBackground: "bg-yellow-50",
-    },
-  ];
 
   return (
     <div className="divide-y divide-gray-200 overflow-hidden rounded-lg bg-gray-200 shadow sm:grid sm:grid-cols-2 sm:gap-px sm:divide-y-0">
