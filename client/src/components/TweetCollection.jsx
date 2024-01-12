@@ -19,20 +19,22 @@ export default function TweetCollection() {
     return match ? match[1] : "Unknown";
   }
 
-  const onDelete = (deletedTweetId) => {
-    setSavedTweets((tweets) =>
-      tweets.filter((tweet) => tweet._id !== deletedTweetId)
-    );
-  };
+  const onDelete = async (deletedTweetId) => {
+    try {
+      setSavedTweets((tweets) =>
+        tweets.filter((tweet) => tweet._id !== deletedTweetId)
+      );
 
-  // useEffect(() => {
-  //   axios
-  //     .get(`http://localhost:3001/saveTweet/${username}`)
-  //     .then((response) => {
-  //       setSavedTweets(response.data);
-  //       console.log(response.data);
-  //     });
-  // }, [username]);
+      await axios.delete(
+        `http://localhost:3001/saveTweet/${username}/${deletedTweetId}`
+      );
+
+      console.log(`Tweet ${deletedTweetId} deleted successfully`);
+    } catch (error) {
+      console.error("Error deleting tweet:", error);
+      setSavedTweets((tweets) => [...tweets]);
+    }
+  };
 
   useEffect(() => {
     axios
@@ -80,7 +82,7 @@ export default function TweetCollection() {
           >
             {sortOption === "date"
               ? "Sort by Latest Creation Date"
-              : "Sort by Alphabet"}
+              : "Sort by Username"}
           </button>
         </div>
         {displayedTweets.map((savedTweet) => (
@@ -103,6 +105,7 @@ function TweetCard({ savedTweet, onDelete }) {
   const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
   const [isContactOpen, setIsContactOpen] = useState(false);
   const [selectedTweetId, setSelectedTweetId] = useState(null);
+  const [deleteSuccess, setDeleteSuccess] = useState(false);
 
   function extractUser(tweetContent) {
     const twitterUrlRegex = /https:\/\/twitter.com\/([^/]+)\//;
@@ -114,17 +117,21 @@ function TweetCard({ savedTweet, onDelete }) {
     setExpanded(!expanded);
   };
 
-  //Check back delete function
   const handleDelete = async () => {
     try {
       await axios.delete(
         `http://localhost:3001/saveTweet/${username}/${savedTweet._id}`
       );
-      console.log(`${username}`);
       onDelete(savedTweet._id);
+      setDeleteSuccess(true);
     } catch (error) {
       console.error("Error deleting tweet:", error);
     }
+  };
+
+  const handleConfirm = () => {
+    setDeleteSuccess(false);
+    window.location.reload();
   };
 
   return (
@@ -226,6 +233,25 @@ function TweetCard({ savedTweet, onDelete }) {
                 setIsContactOpen={setIsContactOpen}
                 savedTweet={savedTweet}
               />
+            )}
+
+            {/* Successful Deletion */}
+            {deleteSuccess && (
+              <div className="fixed ml-[25%] rounded-lg w-[50%] inset-0 flex items-center justify-center z-10">
+                <div className="bg-white p-6 rounded-lg shadow-xl border-2">
+                  <h1 className="text-xl font-semibold text-center mb-4">
+                    The tweet has been successfully deleted!
+                  </h1>
+                  <div className="flex justify-center">
+                    <button
+                      onClick={handleConfirm}
+                      className="bg-indigo-500 text-white font-semibold py-2 px-4 mr-3 rounded hover:bg-indigo-600"
+                    >
+                      Nice!
+                    </button>
+                  </div>
+                </div>
+              </div>
             )}
           </div>
         )}
