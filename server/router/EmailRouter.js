@@ -24,7 +24,7 @@ router.post("/send-email", async (req, res) => {
     },
     to: recipientEmail,
     subject: subject,
-    text: message,
+    html: message,
   };
 
   try {
