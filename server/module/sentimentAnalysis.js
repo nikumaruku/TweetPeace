@@ -17,15 +17,14 @@ async function analyzeTweetContent(tweetUrl) {
   const sentiment = new Sentiment();
 
   try {
-    await page.goto(tweetUrl);
     await page.goto(tweetUrl, { waitUntil: "networkidle2", timeout: 0 });
-    const tweetContent = await page.$eval(
+    const isiTweet = await page.$eval(
       'div[data-testid="tweetText"]',
       (tweet) => tweet.textContent
     );
 
     // Analyze the tweet content for sentiment
-    const analysis = sentiment.analyze(tweetContent);
+    const analysis = sentiment.analyze(isiTweet);
 
     //--------------------------------------------------------------------
 
@@ -41,7 +40,7 @@ async function analyzeTweetContent(tweetUrl) {
         : "Green";
 
     // Calculate the percentage of negative words
-    const words = tweetContent.split(/\s+/);
+    const words = isiTweet.split(/\s+/);
     let negativeWordCount = 0;
     const badWords = {};
 
@@ -58,9 +57,12 @@ async function analyzeTweetContent(tweetUrl) {
       }
     });
 
+    
+
     return {
       ...analysis,
       overallSentiment,
+      isiTweet,
       tweetCategory,
       negativeWordCount,
       badWords: Object.entries(badWords).map(([word, count]) => ({
