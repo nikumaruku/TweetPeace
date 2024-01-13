@@ -4,6 +4,7 @@ import { useLocation } from "react-router-dom";
 import ErrorTweet from "./modals/ErrorTweet";
 import ErrorThread from "./modals/ErrorThread";
 import { PlusCircleIcon } from "@heroicons/react/24/outline";
+import { SimpleGauge } from "react-gauges";
 
 export default function AnalyseTweet() {
   const [tweetContent, setTweetContent] = useState("");
@@ -16,7 +17,6 @@ export default function AnalyseTweet() {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
-  // const [resultSaved, setResultSaved] = useState(false);
   const [analysisResult, setAnalysisResult] = useState(null);
   const [error, setError] = useState(null);
   const [tweetError, setTweetError] = useState(null);
@@ -24,10 +24,23 @@ export default function AnalyseTweet() {
   const [analysisComplete, setAnalysisComplete] = useState(false);
   const [chooseTweet, setChooseTweet] = useState(false);
   const [chooseThread, setChooseThread] = useState(false);
+  const [threadButton, setThreadButton] = useState(true);
+  const [threadDetails, setThreadDetails] = useState(false);
   const [hasConfirmedData, setHasConfirmedData] = useState(false);
 
   const search = useLocation().search;
   const user = new URLSearchParams(search).get("username");
+
+  const colorMapTweet = {
+    Red: "#ff0000",
+    Yellow: "#fcba03",
+    Green: "#00ff00",
+  };
+
+  const colorMapThread = {
+    Negative: "#ff0000",
+    Positive: "#00ff00",
+  };
 
   useEffect(() => {
     if (analysisResult && analysisResult.tweetCategory === "Red") {
@@ -99,7 +112,9 @@ export default function AnalyseTweet() {
     }
   };
 
-  const handleThreadAnalysis = async () => {
+  const handleThreadAnalysis = async (e) => {
+    e.preventDefault();
+
     try {
       setIsLoading(true);
       setError(null);
@@ -117,7 +132,9 @@ export default function AnalyseTweet() {
       setAnalysisResult(analysisResult);
       setAnalysisComplete(true);
       setThreadResult(true);
-      setHasConfirmedData(false);
+      setIsPopupOpen(false);
+      setThreadButton(false);
+      // setHasConfirmedData(false);
     } catch (error) {
       setError("Error analyzing tweets. Please try again");
     } finally {
@@ -177,14 +194,37 @@ export default function AnalyseTweet() {
     setIsPopupOpen(false);
   };
 
-  const handleConfirmData = () => {
-    setHasConfirmedData(true);
-    setIsPopupOpen(false);
+  // const handleConfirmData = () => {
+  //   setHasConfirmedData(true);
+  //   setIsPopupOpen(false);
+  // };
+
+  const handleThreadDetails = async (e) => {
+    e.preventDefault();
+    setThreadDetails((prevThreadDetails) => !prevThreadDetails);
+  };
+
+  const getOverallThreadSentiment = () => {
+    const totalScore = (analysisResult?.tweetSentiments || []).reduce(
+      (total, tweetSentiment) => total + tweetSentiment.score,
+      0
+    );
+
+    return totalScore >= 0 ? "Positive" : "Negative";
+  };
+
+  const getOverallThreadScore = () => {
+    const totalScore = (analysisResult?.tweetSentiments || []).reduce(
+      (total, tweetSentiment) => total + tweetSentiment.score,
+      0
+    );
+
+    return totalScore;
   };
 
   return (
     <form>
-      <div className="bg-white px-6 py-9 sm:py-18 lg:px-8 ">
+      <div className="bg-white px-6 py-6 sm:py-18 lg:px-8 ">
         <div className="mx-auto max-w-lg text-center">
           <h3 className="text-xl font-bold tracking-tight text-gray-900 sm:text-5xl">
             What type of Twitter content would you like to analyse?
@@ -213,7 +253,7 @@ export default function AnalyseTweet() {
       {/* Analyse Tweet */}
       {chooseTweet && (
         <div className="space-y-5">
-          <div className="border-b border-gray-900/10 pb-12">
+          <div className="border-b border-gray-900/10 pb-8">
             <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
               <div className="col-span-full">
                 <div className="space-y-5 flex flex-col justify-center items-center">
@@ -239,7 +279,7 @@ export default function AnalyseTweet() {
             </div>
             {tweetResult && (
               <div className="flex justify-center items-center">
-                <div className="mt-6 flex flex-col items-center justify-center gap-x-6 border w-[50%] rounded-lg p-6 ">
+                <div className="mt-6 flex flex-col items-center justify-center gap-x-6 border-2 shadow-lg w-[50%] rounded-xl p-6 ">
                   {isLoading && !analysisComplete && (
                     <p className="text-sm font-medium text-gray-500">
                       Analyzing...
@@ -247,24 +287,39 @@ export default function AnalyseTweet() {
                   )}
                   {analysisComplete && (
                     <div className=" flex flex-col justify-center items-center">
-                      <h2 className="text-xl font-bold underline">
+                      <h2 className="text-xl font-bold mb-5">
                         Analysis Result
                       </h2>
-                      <p className="text-base font-medium text-gray-700">
+                      <SimpleGauge
+                        barColor={
+                          colorMapTweet[analysisResult.tweetCategory] ||
+                          "#0f0f0e"
+                        }
+                        value={analysisResult.score}
+                        labelTemplate="{value}"
+                        minLimit={-10}
+                        maxLimit={10}
+                        barWidth={20}
+                      />
+                      {/* <p className="text-base font-medium text-gray-700">
                         Score: {analysisResult.score}
+                      </p> */}
+                      <p className="text-base font-medium text-gray-700 mt-2">
+                        Overall Tweet Sentiment
                       </p>
+                      <h2 className="mb-2">
+                        {analysisResult.overallSentiment}
+                      </h2>
                       <p className="text-base font-medium text-gray-700">
-                        Overall Sentiment: {analysisResult.overallSentiment}
+                        Tweet Category
                       </p>
-                      <p className="text-base font-medium text-gray-700">
-                        Tweet Category: {analysisResult.tweetCategory}
-                      </p>
-                      <p className="text-base font-medium text-gray-700">
+                      <h2>{analysisResult.tweetCategory}</h2>
+                      {/* <p className="text-base font-medium text-gray-700">
                         Negative Words Count: {analysisResult.negativeWordCount}
-                      </p>
+                      </p> */}
                       {analysisResult.badWords && (
-                        <div className="my-5">
-                          <h3 className="text-md font-semibold mt-4">
+                        <div>
+                          {/* <h3 className="text-md font-semibold mt-4">
                             List of Bad Words Detected:
                           </h3>
                           <ul className="list-disc ml-4">
@@ -276,20 +331,21 @@ export default function AnalyseTweet() {
                                 {word.word} - {word.count} occurrence(s)
                               </li>
                             ))}
-                          </ul>
+                          </ul> */}
                         </div>
                       )}
                       {analysisResult.tweetCategory === "Yellow" && (
                         <button
                           type="button"
                           onClick={handleSaveTweet}
-                          className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                          className="rounded-md bg-indigo-600 px-3 py-2 mt-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                         >
                           Save Result
                         </button>
                       )}
                     </div>
                   )}
+
                   {error && <p>{error}</p>}
                 </div>
               </div>
@@ -301,7 +357,7 @@ export default function AnalyseTweet() {
 
       {/* Analyse Thread */}
       {chooseThread && (
-        <div className="border-b border-gray-300  flex flex-col justify-center items-center">
+        <div className="border-b border-gray-300 flex flex-col justify-center items-center">
           {tweetUrls.map((url, index) => (
             <div
               key={index}
@@ -317,7 +373,7 @@ export default function AnalyseTweet() {
                 type="text"
                 id={`tweetUrl-${index}`}
                 name={`tweetUrl-${index}`}
-                className="block  rounded-md border-gray-300 py-2 px-4 text-gray-900 shadow-sm focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-5"
+                className="block mb-4 rounded-md border-gray-300 py-2 px-4 text-gray-900 shadow-sm focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-5"
                 value={url}
                 onChange={(e) => handleInputChange(index, e.target.value)}
                 required
@@ -334,112 +390,112 @@ export default function AnalyseTweet() {
             </div>
           ))}
 
-          <button
-            type="button"
-            onClick={handleAddInput}
-            className="mt-5 mb-5 rounded-md bg-indigo-50 px-3 py-2 text-sm font-semibold text-indigo-600 shadow-sm hover:bg-indigo-100"
-          >
-            <PlusCircleIcon className="h-6 w-6" aria-hidden="true" />
-          </button>
-
           {threadError && <ErrorThread threadError={threadError} />}
-          <button
-            type="button"
-            onClick={handleGetThread}
-            className="mt-5 mb-10 bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-2 px-4 rounded"
-          >
-            Request Thread
-          </button>
 
-          {hasConfirmedData && (
-            <button
-              onClick={() => handleThreadAnalysis()}
-              disabled={isLoading}
-              type="submit"
-              className="mt-5 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            >
-              Analyse
-            </button>
+          {threadButton && (
+            <>
+              <button
+                type="button"
+                onClick={handleAddInput}
+                className="mt-2 mb-10 rounded-md bg-indigo-50 px-3 py-2 text-sm font-semibold text-indigo-600 shadow-sm hover:bg-indigo-100"
+              >
+                <PlusCircleIcon className="h-6 w-6" aria-hidden="true" />
+              </button>
+              <button
+                type="button"
+                onClick={handleGetThread}
+                className="rounded-md bg-indigo-600 px-3 py-2 mb-10 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              >
+                Request Thread
+              </button>
+            </>
           )}
 
           {threadResult && (
             <>
               {isLoading && !analysisComplete && <p>Analyzing...</p>}
               {analysisComplete && (
-                <div className="w-[50%] my-5 flex flex-col items-center justify-center mx-auto p-4 bg-white rounded shadow-lg">
-                  <h2 className="text-xl font-bold mb-4">Analysis Result</h2>
-                  <div className="flex flex-wrap mx-5 mb-6 ">
+                <div className="w-[50%] my-6 border-2 rounded-xl flex flex-col items-center justify-center mx-auto p-4 bg-white rounded-xl shadow-lg">
+                  <h2 className="text-xl font-bold mb-4 mt-5">
+                    Analysis Result
+                  </h2>
+                  <div className="flex items-center justify-center">
+                    <SimpleGauge
+                      value={getOverallThreadScore()}
+                      labelTemplate="{value}"
+                      barColor={
+                        colorMapThread[getOverallThreadSentiment()] ||
+                        "##0f0f0e"
+                      }
+                      minLimit={-10}
+                      maxLimit={10}
+                      barWidth={20}
+                    />
+                  </div>
+                  <div className="flex flex-col mx-5 mb-2 mt-5 items-center justify-center m-5">
                     {analysisResult && analysisResult.tweetSentiments ? (
-                      analysisResult.tweetSentiments.map(
-                        (tweetSentiment, index) => (
-                          <div key={index} className="w-1/2 px-10 mb-4">
-                            <h3 className="text-lg font-semibold mb-2">
-                              Tweet {index + 1}
-                            </h3>
-                            <div className="mb-2">
-                              <label className="text-gray-700">Score:</label>
-                              <span className="text-gray-800 ml-2">
-                                {tweetSentiment.score}
-                              </span>
-                            </div>
-                            <div className="mb-2 flex flex-col">
-                              <label className="text-gray-700">
-                                Comparative:
-                              </label>
-                              <span className="text-gray-800">
-                                {tweetSentiment.comparative}
-                              </span>
-                            </div>
-                            <div className="mb-2">
-                              <label className="text-gray-700">Words:</label>
-                              <ul className="list-disc list-inside ml-4">
-                                {tweetSentiment.words.map((word, wordIndex) => (
-                                  <li key={wordIndex} className="text-gray-800">
-                                    {word}
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-                            <div className="mb-2">
-                              <label className="text-gray-700">
-                                Positive Words:
-                              </label>
-                              <ul className="list-disc list-inside ml-4">
-                                {tweetSentiment.positive.map(
-                                  (word, wordIndex) => (
-                                    <li
-                                      key={wordIndex}
-                                      className="text-gray-800"
-                                    >
-                                      {word}
-                                    </li>
-                                  )
-                                )}
-                              </ul>
-                            </div>
-                            <div className="mb-4">
-                              <label className="text-gray-700">
-                                Negative Words:
-                              </label>
-                              <ul className="list-disc list-inside ml-4">
-                                {tweetSentiment.negative.map(
-                                  (word, wordIndex) => (
-                                    <li
-                                      key={wordIndex}
-                                      className="text-gray-800"
-                                    >
-                                      {word}
-                                    </li>
-                                  )
-                                )}
-                              </ul>
-                            </div>
-                          </div>
-                        )
-                      )
+                      <div className="flex flex-col items-center justify-center mb-5">
+                        <p className="text-base font-bold text-gray-700">
+                          Thread Sentiment
+                        </p>
+                        <h3>{getOverallThreadSentiment()}</h3>
+                      </div>
                     ) : (
                       <p>No sentiment analysis results available.</p>
                     )}
+                    {threadDetails && (
+                      <div className="flex flex-wrap justify-center ">
+                        {analysisResult.tweetSentiments.map(
+                          (tweetSentiment, index) => (
+                            <div
+                              key={index}
+                              className="items-center justify-center px-4 mb-4"
+                            >
+                              <div className="w-48 flex flex-col items-center justify-center border-2 p-4 rounded-md bg-white">
+                                <h3 className="text-base font-bold text-gray-700">
+                                  Tweet {index + 1}
+                                </h3>
+
+                                <div className="flex flex-col items-center justify-center mt-2">
+                                  <label className="text-base font-light text-gray-700">
+                                    Score
+                                  </label>
+                                  <p>{tweetSentiment.score}</p>
+                                </div>
+
+                                <div className="flex flex-col items-center justify-center mt-5">
+                                  <label className="text-base font-light text-gray-700">
+                                    Bad Words
+                                  </label>
+                                  {tweetSentiment.negative &&
+                                  tweetSentiment.negative.length > 0 ? (
+                                    tweetSentiment.negative.map(
+                                      (word, wordIndex) => (
+                                        <p
+                                          key={wordIndex}
+                                          className="text-gray-800"
+                                        >
+                                          {word}
+                                        </p>
+                                      )
+                                    )
+                                  ) : (
+                                    <p>Non detected!</p>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          )
+                        )}
+                      </div>
+                    )}
+                    <button
+                      onClick={handleThreadDetails}
+                      type="submit"
+                      className="mt-3 rounded-md bg-indigo-600 px-3 py-2 mb-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                    >
+                      {threadDetails ? "Minimize" : "View Details"}
+                    </button>
                   </div>
                 </div>
               )}
@@ -449,7 +505,7 @@ export default function AnalyseTweet() {
           {/* Popup */}
           {isPopupOpen && (
             <div className="fixed ml-[25%] rounded-lg w-[50%] inset-0 flex items-center justify-center z-10">
-              <div className="bg-white p-4 rounded shadow-lg space-y-4">
+              <div className="bg-white border-2 p-4 rounded shadow-lg space-y-4">
                 {threadContent && (
                   <>
                     <p>
@@ -463,8 +519,8 @@ export default function AnalyseTweet() {
                     ))}
                     <div className="flex items-center justify-center">
                       <button
-                        onClick={handleConfirmData}
-                        className="bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-2 px-4 mr-3  rounded"
+                        onClick={handleThreadAnalysis}
+                        className="bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-2 px-4 mr-3 rounded"
                       >
                         Yes
                       </button>
@@ -480,6 +536,12 @@ export default function AnalyseTweet() {
               </div>
             </div>
           )}
+
+          {/* {threadDetails && (
+            <div className="fixed ml-[25%] rounded-lg w-[50%] inset-0 flex items-center justify-center z-10">
+
+            </div>
+          )} */}
         </div>
       )}
       {/* ------------------------------------- */}
