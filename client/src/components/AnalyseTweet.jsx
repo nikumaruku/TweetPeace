@@ -1,16 +1,16 @@
-import { useState, useEffect } from "react";
 import axios from "axios";
+import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import ErrorTweet from "./modals/ErrorTweet";
-import ErrorThread from "./modals/ErrorThread";
 import { PlusCircleIcon } from "@heroicons/react/24/outline";
 import { SimpleGauge } from "react-gauges";
+
+import ErrorTweet from "./modals/ErrorTweet";
+import ErrorThread from "./modals/ErrorThread";
 
 export default function AnalyseTweet() {
   const [tweetContent, setTweetContent] = useState("");
   const [threadContent, setThreadContent] = useState("");
   const [threadUser, setThreadUser] = useState("");
-  const [username, setUsername] = useState("");
   const [tweetUrls, setTweetUrls] = useState(["", ""]);
   const [tweetResult, setTweetResult] = useState(false);
   const [threadResult, setThreadResult] = useState(false);
@@ -26,7 +26,6 @@ export default function AnalyseTweet() {
   const [chooseThread, setChooseThread] = useState(false);
   const [threadButton, setThreadButton] = useState(true);
   const [threadDetails, setThreadDetails] = useState(false);
-  const [hasConfirmedData, setHasConfirmedData] = useState(false);
 
   const search = useLocation().search;
   const user = new URLSearchParams(search).get("username");
@@ -193,11 +192,6 @@ export default function AnalyseTweet() {
   const handleClosePopup = () => {
     setIsPopupOpen(false);
   };
-
-  // const handleConfirmData = () => {
-  //   setHasConfirmedData(true);
-  //   setIsPopupOpen(false);
-  // };
 
   const handleThreadDetails = async (e) => {
     e.preventDefault();
@@ -537,11 +531,6 @@ export default function AnalyseTweet() {
             </div>
           )}
 
-          {/* {threadDetails && (
-            <div className="fixed ml-[25%] rounded-lg w-[50%] inset-0 flex items-center justify-center z-10">
-
-            </div>
-          )} */}
         </div>
       )}
       {/* ------------------------------------- */}

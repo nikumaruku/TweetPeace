@@ -1,5 +1,6 @@
 import express from "express";
 import Sentiment from "sentiment";
+import analyzeThread from "../module/analyseThread.js";
 import fetchThreadContent from "../module/fetchTwitterThread.js";
 import { TwitterThreadModel } from "../models/TwitterThreadModel.js";
 
@@ -22,13 +23,15 @@ router.post("/analyse", async (req, res) => {
     res.status(200).json({ tweetSentiments });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "An error occurred while analyzing tweet contents" });
+    res
+      .status(500)
+      .json({ message: "An error occurred while analyzing tweet contents" });
   }
 });
 
 router.post("/obtain", async (req, res) => {
   try {
-    const {  threadUrls } = req.body;
+    const { threadUrls } = req.body;
 
     const threadIds = [];
     let username = "";
