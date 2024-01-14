@@ -2,9 +2,15 @@ import axios from "axios";
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import ErrorReport from "./modals/ErrorReport";
-// import SuccessReport from "./modals/SuccessReport";
 
 export default function ReportTweet() {
+
+  const sentimentImages = {
+    Green: "naisu.jpeg",
+    Red: "angry.jpeg",
+    Yellow: "meh.jpeg",
+  };
+
   const [tweetLink, setTweetLink] = useState("");
   const [incidentType, setIncidentType] = useState("Doxx");
   const [description, setDescription] = useState("");
@@ -74,20 +80,22 @@ export default function ReportTweet() {
     e.preventDefault();
     try {
       const response = await axios.post(
-        `http://localhost:3001/report/analysess`,
+        `http://localhost:3001/report/analyseReport`,
         { tweetLink }
       );
 
       setReportResult(response.data);
       console.log(response.data);
       setDisplayDetails(true);
+      setIsPopupOpen(false);
     } catch (error) {
       console.error("Error creating report:", error);
     }
   };
 
   const handleDetails = async () => {
-    displayDetails(false);
+    setDisplayDetails(false);
+    setIsPopupOpen(false);
   };
 
   const handleReject = () => {
@@ -216,27 +224,28 @@ export default function ReportTweet() {
       {/* Suggestion Popup */}
       {isPopupOpen && (
         <div className="fixed ml-[25%] rounded-lg w-[50%] inset-0 flex items-center justify-center z-10">
-          <div className="bg-white p-4 rounded shadow-lg space-y-4">
-            <>
-              <p>
-                <b>Like to know more about your report? We can help!</b>
-              </p>
-              <div className="flex items-center justify-center">
-                <button
-                  onClick={analyseReport}
-                  type="submit"
-                  className="bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-2 px-4 mr-3 rounded"
-                >
-                  Sure!
-                </button>
-                <button
-                  onClick={() => handleReject()}
-                  className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded"
-                >
-                  Never mind
-                </button>
-              </div>
-            </>
+          <div className="bg-white p-6 rounded-lg shadow-xl border-2">
+            <h2 className="text-xl font-semibold text-center mb-4">
+              Assistance with Your Report
+            </h2>
+            <p className="text-base text-gray-700 mb-4">
+              Our team is here to assist you further regarding your report.
+              Would you like to delve into more details?
+            </p>
+            <div className="flex justify-center">
+              <button
+                onClick={analyseReport}
+                className="bg-indigo-500 text-white font-semibold py-2 px-4 mr-3 rounded hover:bg-indigo-600"
+              >
+                Yes, Please!
+              </button>
+              <button
+                onClick={handleReject}
+                className="bg-red-500 text-white font-semibold py-2 px-4 rounded hover:bg-red-600"
+              >
+                Not now
+              </button>
+            </div>
           </div>
         </div>
       )}
@@ -244,33 +253,66 @@ export default function ReportTweet() {
       {/* Details Popup */}
       {displayDetails && reportResult && (
         <div className="fixed ml-[25%] rounded-lg w-[50%] inset-0 flex items-center justify-center z-10">
-          <div className="bg-white p-4 rounded shadow-lg space-y-4">
-            <>
-              <p>
-                <b>
-                  Your report seems a bit concerning! We would suggest you to
-                  also report to Twitter directly through this link
-                  ((https://help.twitter.com/en/forms/safety-and-sensitive-content/abuse)
-                  /) for more appropriate and direct response!
-                </b>
-              </p>
-              <h2 className="text-xl font-bold underline">Analysis Result</h2>
-              <p className="text-base font-medium text-gray-700">
-                Overall Sentiment: {reportResult.reportAnalysis.overallSentiment}
-              </p>
-              <p className="text-base font-medium text-gray-700">
-                Tweet Category: {reportResult.reportAnalysis.tweetCategory}
-              </p>
-
-              <div className="flex items-center justify-center">
-                <button
-                  onClick={handleDetails}
-                  className="bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-2 px-4 mr-3 rounded"
-                >
-                  Understood
-                </button>
+          <div className="bg-white p-4 border-2 rounded-xl shadow-lg space-y-4">
+            <h2 className="text-xl font-bold text-center">Report Analysis</h2>
+            <div className="flex justify-center items-center space-x-10 pr-8">
+              <div className="flex flex-col justify-center items-center">
+                <p className="text-base font-medium text-gray-700">
+                  Report Sentiment
+                </p>
+                <h2 className="font-bold">
+                  {reportResult.reportAnalysis.overallSentiment}
+                </h2>
               </div>
-            </>
+              <div className="flex flex-col justify-center items-center">
+                <p className="text-base font-medium text-gray-700">Category</p>
+                <h2 className="font-bold">
+                  {reportResult.reportAnalysis.tweetCategory}
+                </h2>
+              </div>
+            </div>
+            {/* Start dev */}
+            {/* <div className="flex flex-col justify-center items-center">
+              {" "}
+              {sentimentImages[
+                reportResult.reportAnalysis.tweetCategory
+              ] && (
+                <img
+                  src={`../../src//assets/${
+                    sentimentImages[
+                      reportResult.reportAnalysis.tweetCategory
+                    ]
+                  }`}
+                  width={50}
+                  height={50}
+                  alt="Sentiment Image"
+                  className="mt-4"
+                />
+              )}
+            </div> */}
+            {/* End dev */}
+            <p className="text-sm text-gray-600">
+              Your report seems concerning! Consider to also directly report to
+              Twitter by clicking
+              <a
+                href="https://help.twitter.com/en/forms/safety-and-sensitive-content/abuse"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-indigo-600 underline ml-1"
+              >
+                here
+              </a>
+              .
+            </p>
+            <div className="flex items-center justify-center">
+              <button
+                onClick={handleDetails}
+                type="submit"
+                className="bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-2 px-4 mt-3 rounded"
+              >
+                Understood!
+              </button>
+            </div>
           </div>
         </div>
       )}

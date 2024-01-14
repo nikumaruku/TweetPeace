@@ -1,10 +1,24 @@
 import express from "express";
+import analyzeReport from "../module/analyseReport.js";
 import { ReportModel } from "../models/ReportModel.js";
 import { UserModel } from "../models/UserModel.js";
 
 const router = express.Router();
 
 //General user
+router.post("/analyseReport", async (req, res) => {
+  try {
+    const { tweetLink } = req.body;
+
+    const reportAnalysis = await analyzeReport(tweetLink);
+
+    res.json({ reportAnalysis });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 router.post("/:username", async (req, res) => {
   try {
     const { tweetLink, incidentType, description, screenshot } = req.body;
