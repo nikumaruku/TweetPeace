@@ -38,15 +38,20 @@ router.post("/:username", async (req, res) => {
 
 router.get("/:username", async (req, res) => {
   try {
-    const user = await UserModel.findOne({
-      username: req.params.username,
-    }).populate("savedTweets");
+    const { username } = req.params;
+    const user = await UserModel.findOne({ username });
 
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
 
-    const savedTweets = user.savedTweets;
+    const savedTweets = await SavedTweetModel.find({ user: user._id });
+
+    if (!savedTweets || savedTweets.length === 0) {
+      return res
+        .status(404)
+        .json({ error: "No saved tweets found for this user" });
+    }
 
     res.status(200).json(savedTweets);
   } catch (error) {
@@ -78,16 +83,19 @@ router.get("/total/:username", async (req, res) => {
 
 router.delete("/:username/:tweetId", async (req, res) => {
   try {
-    const user = await UserModel.findOne({ username: req.params.username });
+    const tweetIdToDelete = req.params.tweetId;
 
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
+    const tweetToDelete = await SavedTweetModel.findById(tweetIdToDelete);
+
+    if (!tweetToDelete) {
+      return res.status(404).json({ error: "Tweet not found" });
     }
 
-    user.savedTweets.pull({ _id: req.params.tweetId });
+    await SavedTweetModel.deleteOne({ _id: tweetIdToDelete });
 
-    await user.save();
-    res.status(200).json({ message: "Saved tweet deleted successfully" });
+    res.status(200).json({
+      message: "Saved tweet and associated report deleted successfully",
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal server error" });
