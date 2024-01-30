@@ -1,6 +1,5 @@
 import express from "express";
 import Sentiment from "sentiment";
-import analyzeThread from "../module/analyseThread.js";
 import fetchThreadContent from "../module/fetchTwitterThread.js";
 import { TwitterThreadModel } from "../models/TwitterThreadModel.js";
 

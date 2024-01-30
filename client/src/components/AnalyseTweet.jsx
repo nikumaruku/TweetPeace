@@ -200,16 +200,17 @@ export default function AnalyseTweet() {
 
   const getOverallThreadSentiment = () => {
     const totalScore = (analysisResult?.tweetSentiments || []).reduce(
-      (total, tweetSentiment) => total + tweetSentiment.score,
+      (total, tweetSentiment) => total + tweetSentiment.comparative,
       0
     );
 
     return totalScore >= 0 ? "Positive" : "Negative";
+    
   };
 
   const getOverallThreadScore = () => {
     const totalScore = (analysisResult?.tweetSentiments || []).reduce(
-      (total, tweetSentiment) => total + tweetSentiment.score,
+      (total, tweetSentiment) => total + tweetSentiment.comparative,
       0
     );
 
@@ -284,20 +285,20 @@ export default function AnalyseTweet() {
                       <h2 className="text-xl font-bold mb-5">
                         Analysis Result
                       </h2>
-                      <SimpleGauge
-                        barColor={
-                          colorMapTweet[analysisResult.tweetCategory] ||
-                          "#0f0f0e"
-                        }
-                        value={analysisResult.score}
-                        labelTemplate="{value}"
-                        minLimit={-10}
-                        maxLimit={10}
-                        barWidth={20}
-                      />
-                      {/* <p className="text-base font-medium text-gray-700">
-                        Score: {analysisResult.score}
-                      </p> */}
+                      <div className="">
+                        <SimpleGauge
+                          barColor={
+                            colorMapTweet[analysisResult.tweetCategory] ||
+                            "#0f0f0e"
+                          }
+                          value={analysisResult.comparative.toFixed(2)}
+                          labelTemplate="{value}"
+                          minLimit={0}
+                          maxLimit={0.1}
+                          barWidth={15}
+                          indicatorVisible={false}
+                        />
+                      </div>
                       <p className="text-base font-medium text-gray-700 mt-2">
                         Overall Tweet Sentiment
                       </p>
@@ -308,9 +309,6 @@ export default function AnalyseTweet() {
                         Tweet Category
                       </p>
                       <h2>{analysisResult.tweetCategory}</h2>
-                      {/* <p className="text-base font-medium text-gray-700">
-                        Negative Words Count: {analysisResult.negativeWordCount}
-                      </p> */}
                       {analysisResult.badWords && (
                         <div>
                           {/* <h3 className="text-md font-semibold mt-4">
@@ -415,15 +413,16 @@ export default function AnalyseTweet() {
                   </h2>
                   <div className="flex items-center justify-center">
                     <SimpleGauge
-                      value={getOverallThreadScore()}
+                      value={getOverallThreadScore().toFixed(2)}
                       labelTemplate="{value}"
                       barColor={
                         colorMapThread[getOverallThreadSentiment()] ||
                         "##0f0f0e"
                       }
-                      minLimit={-10}
-                      maxLimit={10}
-                      barWidth={20}
+                      minLimit={-5}
+                      maxLimit={5}
+                      barWidth={15}
+                      indicatorVisible={false}
                     />
                   </div>
                   <div className="flex flex-col mx-5 mb-2 mt-5 items-center justify-center m-5">
@@ -454,7 +453,7 @@ export default function AnalyseTweet() {
                                   <label className="text-base font-light text-gray-700">
                                     Score
                                   </label>
-                                  <p>{tweetSentiment.score}</p>
+                                  <p>{tweetSentiment.comparative.toFixed(2)}</p>
                                 </div>
 
                                 <div className="flex flex-col items-center justify-center mt-5">
@@ -530,7 +529,6 @@ export default function AnalyseTweet() {
               </div>
             </div>
           )}
-
         </div>
       )}
       {/* ------------------------------------- */}

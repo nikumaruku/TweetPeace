@@ -6,13 +6,13 @@ import ErrorReport from "./modals/ErrorReport";
 export default function ReportTweet() {
 
   const sentimentImages = {
-    Green: "naisu.jpeg",
-    Red: "angry.jpeg",
-    Yellow: "meh.jpeg",
+    Green: "naisu.png",
+    Red: "angry.png",
+    Yellow: "meh.png",
   };
 
   const [tweetLink, setTweetLink] = useState("");
-  const [incidentType, setIncidentType] = useState("Doxx");
+  const [incidentType, setIncidentType] = useState("Harassment");
   const [description, setDescription] = useState("");
   const [screenshot, setScreenshot] = useState("");
   const [reportError, setReportError] = useState(null);
@@ -148,11 +148,11 @@ export default function ReportTweet() {
             value={incidentType}
             onChange={(e) => setIncidentType(e.target.value)}
           >
-            <option value="Doxx">Harassment</option>
-            <option value="Threathen">Troll</option>
-            <option value="Mencarut">Flaming</option>
-            <option value="Mencarut">Masquerading</option>
-            <option value="Mencarut">Doxing</option>
+            <option value="Harassment">Harassment</option>
+            <option value="Troll">Troll</option>
+            <option value="Flaming">Flaming</option>
+            <option value="Masquerading">Masquerading</option>
+            <option value="Doxing">Doxing</option>
           </select>
         </div>
 
@@ -255,6 +255,20 @@ export default function ReportTweet() {
         <div className="fixed ml-[25%] rounded-lg w-[50%] inset-0 flex items-center justify-center z-10">
           <div className="bg-white p-4 border-2 rounded-xl shadow-lg space-y-4">
             <h2 className="text-xl font-bold text-center">Report Analysis</h2>
+            <div className="flex flex-col justify-center items-center">
+              {" "}
+              {sentimentImages[reportResult.reportAnalysis.tweetCategory] && (
+                <img
+                  src={`../../src//assets/${
+                    sentimentImages[reportResult.reportAnalysis.tweetCategory]
+                  }`}
+                  width={50}
+                  height={50}
+                  alt="Sentiment Image"
+                  
+                />
+              )}
+            </div>
             <div className="flex justify-center items-center space-x-10 pr-8">
               <div className="flex flex-col justify-center items-center">
                 <p className="text-base font-medium text-gray-700">
@@ -272,27 +286,10 @@ export default function ReportTweet() {
               </div>
             </div>
             {/* Start dev */}
-            {/* <div className="flex flex-col justify-center items-center">
-              {" "}
-              {sentimentImages[
-                reportResult.reportAnalysis.tweetCategory
-              ] && (
-                <img
-                  src={`../../src//assets/${
-                    sentimentImages[
-                      reportResult.reportAnalysis.tweetCategory
-                    ]
-                  }`}
-                  width={50}
-                  height={50}
-                  alt="Sentiment Image"
-                  className="mt-4"
-                />
-              )}
-            </div> */}
+
             {/* End dev */}
             <p className="text-sm text-gray-600">
-              Your report seems concerning! Consider to also directly report to
+              Your report seems concerning! Consider reporting to
               Twitter by clicking
               <a
                 href="https://help.twitter.com/en/forms/safety-and-sensitive-content/abuse"

@@ -9,13 +9,13 @@ const MAX_GUARDIAN_COUNT = 1;
 
 router.post("/create/:username", async (req, res) => {
   try {
-    const currentGuardianCount = await GuardianModel.countDocuments();
+    // const currentGuardianCount = await GuardianModel.countDocuments();
 
-    if (currentGuardianCount > MAX_GUARDIAN_COUNT) {
-      return res.status(400).json({
-        message: `Maximum guardian limit reached (${MAX_GUARDIAN_COUNT}). Cannot add more guardians.`,
-      });
-    }
+    // if (currentGuardianCount > MAX_GUARDIAN_COUNT) {
+    //   return res.status(400).json({
+    //     message: `Maximum guardian limit reached (${MAX_GUARDIAN_COUNT}). Cannot add more guardians.`,
+    //   });
+    // }
 
     const { name, email, phone, relationship } = req.body;
     const username = req.params.username;

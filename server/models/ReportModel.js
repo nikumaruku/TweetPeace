@@ -8,7 +8,7 @@ const ReportSchema = mongoose.Schema({
   incidentType: {
     type: String,
     required: true,
-    enum: ["Doxx", "Threathen", "Mencarut"],
+    enum: ["Harassment", "Troll", "Flaming", "Masquerading", "Doxing"],
   },
   description: {
     type: String,

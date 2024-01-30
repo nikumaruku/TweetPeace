@@ -23,14 +23,10 @@ async function analyzeReport(tweetUrl) {
       (tweet) => tweet.textContent
     );
 
-    // Analyze the tweet content for sentiment
     const analysis = sentiment.analyze(isiTweet);
-
-    //--------------------------------------------------------------------
 
     const overallSentiment = analysis.score > 0 ? "Positive" : "Negative"; //Check back the logic
 
-    // Determine the tweet category
     let tweetCategory = "Green";
     tweetCategory =
       analysis.score < 0
@@ -45,7 +41,7 @@ async function analyzeReport(tweetUrl) {
     };
   } catch (error) {
     console.error("Error extracting or analyzing tweet content:", error);
-    return null; // Handle the error as needed
+    return null; 
   } finally {
     await browser.close();
   }

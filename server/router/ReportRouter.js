@@ -109,7 +109,6 @@ router.get("/username/:id", async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: "User not not found" });
     }
-
     const username = user.username;
 
     res.status(200).json({ username });
